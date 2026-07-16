@@ -55,7 +55,7 @@ jobs:
 
       - name: Package release dry run
         shell: pwsh
-        run: .\scripts\package-release.ps1 -Version "0.1.0"
+        run: .\scripts\package-release.ps1
 
       - name: Upload extension package
         uses: actions/upload-artifact@v4
@@ -70,7 +70,7 @@ jobs:
         with:
           name: ${{ matrix.product }}-release-dry-run
           path: |
-            apps/${{ matrix.product }}/dist/release/${{ matrix.product }}-local-exporter-v0.1.0-windows.zip
-            apps/${{ matrix.product }}/dist/release/${{ matrix.product }}-local-exporter-extension-v0.1.0.zip
+            apps/${{ matrix.product }}/dist/release/${{ matrix.product }}-local-exporter-v*-windows.zip
+            apps/${{ matrix.product }}/dist/release/${{ matrix.product }}-local-exporter-extension-v*.zip
             apps/${{ matrix.product }}/dist/release/SHA256SUMS.txt
             apps/${{ matrix.product }}/dist/release/release-manifest.json
