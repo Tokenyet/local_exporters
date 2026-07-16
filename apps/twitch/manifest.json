@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAscKKyK90gAsGGJ4EZ9RlpwPuq9G9J/eqaPTMhZGK18PxGX16Xj4jEl6X51lyITY0f/B//KxwmhJVLvB/hozEWzVRBrsyKVZg6mTBNijT+I6PE1Ka/r//aNu55tLslXh7eoNr4ygD2cS13Dtp35OOMFpwQOWr/nR58gIsXFrM1EJ7qOw1hh0e4+wbaN07IuqmvEWgt9DrJz98wA21vJsAH6sIvFbN9XghoVcHgDRKLJEq8QKihktVKix252s/e8u+RHir9IbYm+zBkhEuVT1txTEWbWKXvlk3/zF6Jl9uKanz5lKHkVD5eC0f6SRElc6aA0xx/KclSEGTkKmSSt+mvQIDAQAB",
   "name": "__MSG_extensionName__",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "minimum_chrome_version": "116",

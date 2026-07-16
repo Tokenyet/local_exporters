@@ -1,6 +1,6 @@
 [project]
 name = "twitch-local-exporter-native-host"
-version = "0.1.0"
+version = "0.1.1"
 description = "Native messaging host for Twitch Local Exporter"
 requires-python = ">=3.11"
 dependencies = [

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1 - 2026-07-16
+
+### Changed
+
+- Replaced the generic play-button artwork with a distinct YouTube video-transcript extension icon.
+- Updated the product overview and official website link.
+
 ## 0.1.0 - 2026-07-02
 
 Initial public release.

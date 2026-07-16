@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No changes yet.
+
+## Twitch 0.1.1 / YouTube 0.1.1 - 2026-07-16
+
 - Consolidated Twitch Local Exporter and YouTube Local Exporter into one monorepo while keeping independent extension packages.
 - Added shared, isolated, and custom local toolchain installation modes.
 - Added automatic NVIDIA CUDA/cuBLAS Whisper transcription for both extensions with CPU fallback.
