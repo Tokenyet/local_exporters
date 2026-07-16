@@ -23,6 +23,8 @@ The project website is published through GitHub Pages:
 
 It includes the motivation behind the project, real exporter screenshots, technical architecture, support notes, and privacy policy.
 
+The website is available in English and Traditional Chinese. On a first visit, browsers that prefer Traditional Chinese are directed to the localized pages. A manual language choice is stored locally and takes precedence on later visits.
+
 ## Quick start
 
 From PowerShell on Windows:

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>隱私權 · Local Exporters</title>
+  <meta name="description" content="Local Exporters 的本機處理、瀏覽器偏好設定與 native messaging 隱私界線。">
+  <link rel="canonical" href="https://www.dowen.idv.tw/local_exporters/zh-TW/privacy.html">
+  <link rel="alternate" hreflang="en" href="https://www.dowen.idv.tw/local_exporters/privacy.html">
+  <link rel="alternate" hreflang="zh-Hant" href="https://www.dowen.idv.tw/local_exporters/zh-TW/privacy.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.dowen.idv.tw/local_exporters/privacy.html">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../language.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="prose-nav-row">
+        <nav><a href="./">Local Exporters</a><a href="support.html">支援</a><a href="privacy.html">隱私權</a><a href="https://github.com/Tokenyet/local_exporters">原始碼</a></nav>
+        <div class="language-switcher" aria-label="語言"><a href="../privacy.html?lang=en" lang="en">EN</a><a class="is-active" href="privacy.html?lang=zh-TW" lang="zh-Hant">正體</a></div>
+      </div>
+      <div class="eyebrow">隱私權</div>
+      <h1>本機處理，清楚的資料界線。</h1>
+      <p class="lead">Local Exporters 的設計目標，是讓產生的媒體與 native 處理流程留在使用者的 Windows 電腦上。</p>
+    </header>
+    <main>
+      <h2>儲存哪些資料</h2>
+      <p>每個擴充功能會在 <code>chrome.storage.sync</code> 儲存使用者偏好，例如輸出資料夾文字、匯出模式、檔案格式、Twitch 聊天室設定與字幕設定。</p>
+
+      <h2>哪些資料會離開瀏覽器</h2>
+      <p>使用者開始匯出時，擴充功能會把已獲授權的頁面網址與所選設定傳給本機 native messaging host。Native host 再使用本機輔助工具取得並轉換指定內容。</p>
+
+      <h2>不會收集哪些資料</h2>
+      <p>本專案不提供分析追蹤、廣告、雲端轉錄或開發者營運的媒體上傳服務。匯出的檔案與下載的輔助工具會留在使用者選擇的本機儲存空間。</p>
+
+      <h2>使用者責任</h2>
+      <p>請只對自己擁有或已獲授權的內容使用這些擴充功能。匯出過程中使用的第三方網站與工具，可能有各自的使用條款與隱私政策。</p>
+
+      <h2>問題與聯絡</h2>
+      <p>請參考<a href="support.html">支援頁面</a>，或到<a href="https://github.com/Tokenyet/local_exporters">原始碼儲存庫</a>提出 Issue。請勿附上 cookies、access token 或私人媒體網址。</p>
+    </main>
+    <footer><a href="./">首頁</a> · <a href="support.html">支援</a> · <a href="https://github.com/Tokenyet/local_exporters">GitHub</a></footer>
+  </div>
+</body>
+</html>

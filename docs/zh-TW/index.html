@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local Exporters · 將 Twitch 與 YouTube 直播轉成可整理的逐字稿</title>
+  <meta name="description" content="將已獲授權的 Twitch 與 YouTube 影片、音訊、字幕與聊天室匯出到本機。為錯過的直播建立逐字稿，方便閱讀、整理大綱或交給你選擇的 AI 摘要工具。">
+  <meta name="keywords" content="Twitch 逐字稿,Twitch VOD 摘要,YouTube 直播字幕,Whisper 字幕,本機 AI 摘要,Twitch 聊天室匯出,YouTube 逐字稿">
+  <meta name="theme-color" content="#14243d">
+  <link rel="canonical" href="https://www.dowen.idv.tw/local_exporters/zh-TW/">
+  <link rel="alternate" hreflang="en" href="https://www.dowen.idv.tw/local_exporters/">
+  <link rel="alternate" hreflang="zh-Hant" href="https://www.dowen.idv.tw/local_exporters/zh-TW/">
+  <link rel="alternate" hreflang="x-default" href="https://www.dowen.idv.tw/local_exporters/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Local Exporters · 補上你錯過的直播內容">
+  <meta property="og:description" content="在 Windows 電腦上以 Whisper 與本機工具，為 Twitch 與 YouTube 直播建立可閱讀、整理與摘要的逐字稿。">
+  <meta property="og:url" content="https://www.dowen.idv.tw/local_exporters/zh-TW/">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../language.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Local Exporters",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Windows",
+    "description": "將已獲授權的 Twitch 與 YouTube 媒體、字幕及聊天室匯出為本機檔案，方便閱讀與摘要的 Chromium 擴充功能。",
+    "url": "https://www.dowen.idv.tw/local_exporters/zh-TW/",
+    "codeRepository": "https://github.com/Tokenyet/local_exporters",
+    "isAccessibleForFree": true,
+    "inLanguage": "zh-Hant"
+  }
+  </script>
+</head>
+<body class="home">
+  <a class="skip-link" href="#main">跳到主要內容</a>
+
+  <div class="site-wrap">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Local Exporters 首頁">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>Local Exporters</span>
+      </a>
+      <div class="header-tools">
+        <nav class="site-nav" aria-label="主要導覽">
+          <a href="#motivation">開發動機</a>
+          <a href="#products">產品畫面</a>
+          <a href="#architecture">技術概念</a>
+          <a href="support.html">支援</a>
+          <a class="nav-source" href="https://github.com/Tokenyet/local_exporters">GitHub</a>
+        </nav>
+        <div class="language-switcher" aria-label="語言">
+          <a href="../?lang=en" lang="en">EN</a>
+          <a class="is-active" href="./?lang=zh-TW" lang="zh-Hant">正體</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="status-pill"><span></span> 開放原始碼 · Windows · 本機處理</div>
+          <p class="kicker">為值得補看的直播而做</p>
+          <h1>補上你錯過的直播內容。</h1>
+          <p class="hero-lead">將字幕、媒體與 Twitch 聊天室匯出成為本機檔案。直播沒有可用逐字稿時，可以用 Whisper 建立字幕，再自行閱讀、整理大綱，或交給你選擇的 AI 摘要工具。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://github.com/Tokenyet/local_exporters/releases">下載發行版本</a>
+            <a class="button button-secondary" href="#products">查看匯出工具</a>
+          </div>
+          <p class="hero-note">擴充功能不會把媒體傳送到 AI 服務；它只建立由你控制的本機檔案。</p>
+        </div>
+
+        <div class="hero-visual" aria-label="從錯過的直播到可使用的本機逐字稿">
+          <div class="visual-orbit orbit-one"></div>
+          <div class="visual-orbit orbit-two"></div>
+          <div class="stream-card">
+            <div class="stream-topline">
+              <span class="live-dot"></span>
+              <span>直播重播</span>
+              <span class="stream-time">02:14:38</span>
+            </div>
+            <div class="stream-stage">
+              <span class="wave wave-a"></span><span class="wave wave-b"></span><span class="wave wave-c"></span><span class="wave wave-d"></span>
+              <span class="wave wave-e"></span><span class="wave wave-f"></span><span class="wave wave-g"></span><span class="wave wave-h"></span>
+            </div>
+            <div class="stream-problem">
+              <span class="problem-icon">CC</span>
+              <div><strong>沒有可用字幕</strong><small>無法取得摘要所需的逐字稿</small></div>
+            </div>
+          </div>
+          <div class="transcript-card">
+            <div class="file-head">
+              <span class="file-icon">SRT</span>
+              <div><strong>stream-transcript.srt</strong><small>由 Whisper 在本機產生</small></div>
+            </div>
+            <div class="transcript-lines" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            <div class="ready-row"><span>可開始整理</span><strong>100%</strong></div>
+          </div>
+          <div class="summary-card">
+            <span class="summary-spark">✦</span>
+            <div><strong>接下來由你決定</strong><small>閱讀、整理大綱或進行摘要</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="motivation section-block" id="motivation">
+        <div class="section-heading">
+          <p class="kicker">為什麼寫這個</p>
+          <h2>直播真正有用的部分，往往正是你沒時間看的那一段。</h2>
+          <p>我一直遇到同一個問題：有一場想補看的直播，卻沒有逐字稿。沒有文字，AI 摘要工具也缺少可靠的來源。Local Exporters 就是為了解決這個實際問題而開始的。</p>
+        </div>
+
+        <div class="motivation-grid">
+          <article class="motive-card motive-youtube">
+            <div class="motive-label"><span class="platform-dot"></span>YouTube</div>
+            <p class="motive-problem">「有一場直播想了解，但它沒有字幕。」</p>
+            <h3>沒有字幕，就沒有逐字稿，也很難得到有用的摘要。</h3>
+            <p>YouTube Local Exporter 會優先使用現有字幕；字幕不存在時，可以在本機執行 Whisper，產生可閱讀或交給摘要工具的 SRT／VTT 檔案。</p>
+            <ul class="feature-list">
+              <li>有 YouTube 字幕時優先使用</li>
+              <li>缺少字幕時以本機 Whisper 產生</li>
+              <li>需要更多上下文時可匯出影片或音訊</li>
+            </ul>
+          </article>
+
+          <article class="motive-card motive-twitch">
+            <div class="motive-label"><span class="platform-dot"></span>Twitch</div>
+            <p class="motive-problem">「常看的實況主以聊天為主，但有時候沒空跟臺。」</p>
+            <h3>我想知道之前到底討論了什麼。</h3>
+            <p>Twitch Local Exporter 能把 VOD 轉成字幕並選擇性匯出聊天室，讓長時間的聊天型直播有足夠結構可整理大綱，也能先判斷哪些片段值得回去看。</p>
+            <ul class="feature-list">
+              <li>從 VOD 音訊建立字幕</li>
+              <li>聊天室可匯出為 JSON、HTML 或純文字</li>
+              <li>讓逐字稿旁保留對話脈絡</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="boundary-note">
+          <span class="boundary-icon" aria-hidden="true">↗</span>
+          <p><strong>Local Exporters 負責準備來源資料，不替你選擇 AI 服務。</strong>逐字稿、聊天室、音訊與影片都是電腦上的一般檔案，接下來要怎麼使用由你決定。</p>
+        </div>
+      </section>
+
+      <section class="products section-block" id="products">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="kicker">兩個匯出工具</p>
+            <h2>直接在正在觀看的頁面上選擇需要的內容。</h2>
+          </div>
+          <p>兩個產品是各自獨立的 Chromium 擴充功能，有不同權限、native host 與發行套件，但共用相同、專注於工作的匯出流程。</p>
+        </div>
+
+        <article class="product-showcase product-twitch">
+          <div class="product-copy">
+            <div class="product-name"><span class="product-number">01</span><span>Twitch Local Exporter</span></div>
+            <h3>把 VOD 媒體、字幕與聊天室放在一起。</h3>
+            <p>在彈出視窗選擇影片、音訊、字幕或聊天室。Windows native host 處理工作時，仍可看到進度並隨時取消。</p>
+            <div class="output-chips"><span>MP4</span><span>音訊</span><span>SRT / VTT</span><span>聊天室 JSON / HTML / TXT</span></div>
+            <a class="text-link" href="https://github.com/Tokenyet/local_exporters/tree/main/apps/twitch">Twitch 原始碼與安裝說明 <span>→</span></a>
+          </div>
+          <figure class="screenshot-stage">
+            <div class="screenshot-glow"></div>
+            <div class="window-bar"><span></span><span></span><span></span><small>擴充功能彈出視窗</small></div>
+            <img src="../assets/twitch-popup-export.png" width="360" height="690" alt="Twitch Local Exporter 彈出視窗，包含影片、音訊、字幕、聊天室、本機輸出資料夾與匯出進度" loading="lazy">
+            <figcaption>Twitch 匯出工具實際畫面</figcaption>
+          </figure>
+        </article>
+
+        <article class="product-showcase product-youtube">
+          <div class="product-copy">
+            <div class="product-name"><span class="product-number">02</span><span>YouTube Local Exporter</span></div>
+            <h3>直播沒有提供逐字稿時，自己建立一份。</h3>
+            <p>可優先使用 YouTube 字幕、缺少時改用本機 Whisper，或直接強制重新轉錄。同一個彈出視窗也能匯出來源影片或純音訊檔。</p>
+            <div class="output-chips"><span>MP4</span><span>M4A / MP3 / OPUS / WAV</span><span>SRT / VTT</span></div>
+            <a class="text-link" href="https://github.com/Tokenyet/local_exporters/tree/main/apps/youtube">YouTube 原始碼與安裝說明 <span>→</span></a>
+          </div>
+          <figure class="screenshot-stage">
+            <div class="screenshot-glow"></div>
+            <div class="window-bar"><span></span><span></span><span></span><small>擴充功能彈出視窗</small></div>
+            <img src="../assets/youtube-popup-export.png" width="332" height="579" alt="YouTube Local Exporter 彈出視窗，顯示本機影片匯出設定與進度" loading="lazy">
+            <figcaption>YouTube 匯出工具實際畫面</figcaption>
+          </figure>
+        </article>
+      </section>
+
+      <section class="architecture section-block" id="architecture">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="kicker">技術概念</p>
+            <h2>瀏覽器提出要求，Windows 負責實際工作。</h2>
+          </div>
+          <p>擴充功能本身刻意保持精簡。下載、封裝、轉錄、聊天室匯出、進度與取消，都交由本機 native messaging host 處理。</p>
+        </div>
+
+        <div class="flow" aria-label="Local Exporters 技術流程">
+          <div class="flow-step"><span class="flow-number">1</span><strong>目前分頁</strong><small>網址與使用者選擇的設定</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step"><span class="flow-number">2</span><strong>擴充功能彈出視窗</strong><small>由使用者明確開始匯出</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step flow-local"><span class="flow-number">3</span><strong>Windows native host</strong><small>工作、狀態、進度與取消</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step flow-tools"><span class="flow-number">4</span><strong>本機工具鏈</strong><small>yt-dlp · FFmpeg · Whisper · Deno</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step flow-output"><span class="flow-number">5</span><strong>你的檔案</strong><small>媒體 · 字幕 · Twitch 聊天室</small></div>
+        </div>
+
+        <div class="tech-grid">
+          <article class="tech-card">
+            <span class="tech-icon tech-blue">GPU</span>
+            <h3>Whisper 自動選擇合適的後端</h3>
+            <p>NVIDIA 系統會優先使用 CUDA／cuBLAS Whisper。CUDA 啟動失敗或沒有 NVIDIA GPU 時，則自動退回 CPU 轉錄。</p>
+          </article>
+          <article class="tech-card">
+            <span class="tech-icon tech-green">CLI</span>
+            <h3>重用電腦上已有的工具</h3>
+            <p>Clean install 會先測試 <code>PATH</code> 中現有的 CLI 指令。只有缺少必要工具或指令無法使用時，才下載內附版本。</p>
+          </article>
+          <article class="tech-card">
+            <span class="tech-icon tech-orange">PC</span>
+            <h3>處理流程留在本機</h3>
+            <p>專案沒有媒體上傳服務或雲端轉錄後端。產生的檔案會寫入你選擇的輸出資料夾。</p>
+          </article>
+        </div>
+
+        <div class="architecture-gallery">
+          <details class="architecture-card">
+            <summary><span><strong>Twitch 架構</strong><small>包含字幕與 VOD 聊天室匯出</small></span><span class="summary-action">查看圖解</span></summary>
+            <img src="../assets/twitch-how-it-works.png" width="1280" height="720" alt="Twitch Local Exporter 從瀏覽器擴充功能、Windows native host 到本機工具的詳細架構圖" loading="lazy">
+          </details>
+          <details class="architecture-card">
+            <summary><span><strong>YouTube 架構</strong><small>媒體與轉錄流程都留在本機電腦</small></span><span class="summary-action">查看圖解</span></summary>
+            <img src="../assets/youtube-how-it-works.png" width="1680" height="941" alt="YouTube Local Exporter 從瀏覽器擴充功能到 Windows 本機工具與輸出檔案的詳細架構圖" loading="lazy">
+          </details>
+        </div>
+      </section>
+
+      <section class="toolchain section-block">
+        <div class="toolchain-copy">
+          <p class="kicker">共用工具鏈</p>
+          <h2>共用工具只下載一次，產品行為仍各自獨立。</h2>
+          <p>兩個擴充功能可以共用 yt-dlp、Deno、FFmpeg、Whisper.cpp 與模型檔案，同時保留獨立的 manifest、權限、native host 與產品專用工具。</p>
+          <code class="path-block">%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code>
+        </div>
+        <div class="tool-stack" aria-label="共用本機工具">
+          <div><span>01</span><strong>yt-dlp</strong><small>取得媒體</small></div>
+          <div><span>02</span><strong>FFmpeg</strong><small>轉換與重新封裝</small></div>
+          <div><span>03</span><strong>Whisper.cpp</strong><small>本機語音轉錄</small></div>
+          <div><span>04</span><strong>Deno</strong><small>YouTube 執行環境支援</small></div>
+        </div>
+      </section>
+
+      <section class="closing">
+        <div>
+          <p class="kicker">用自己的方式補直播</p>
+          <h2>先建立逐字稿，再決定哪些內容值得花時間。</h2>
+        </div>
+        <div class="closing-actions">
+          <a class="button button-light" href="https://github.com/Tokenyet/local_exporters/releases">查看下載項目</a>
+          <a class="button button-ghost" href="support.html">安裝與疑難排解</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <a class="brand footer-brand" href="./">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>Local Exporters</span>
+        </a>
+        <p>將已獲授權的 Twitch 與 YouTube 內容匯出到本機。</p>
+      </div>
+      <nav aria-label="頁尾導覽">
+        <a href="privacy.html">隱私權</a>
+        <a href="support.html">支援</a>
+        <a href="https://github.com/Tokenyet/local_exporters/releases">發行版本</a>
+        <a href="https://github.com/Tokenyet/local_exporters">GitHub</a>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

@@ -4,12 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Support · Local Exporters</title>
+  <meta name="description" content="Installation, native host, shared toolchain, and troubleshooting guidance for Local Exporters.">
+  <link rel="canonical" href="https://www.dowen.idv.tw/local_exporters/support.html">
+  <link rel="alternate" hreflang="en" href="https://www.dowen.idv.tw/local_exporters/support.html">
+  <link rel="alternate" hreflang="zh-Hant" href="https://www.dowen.idv.tw/local_exporters/zh-TW/support.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.dowen.idv.tw/local_exporters/support.html">
   <link rel="stylesheet" href="styles.css">
+  <script src="language.js"></script>
 </head>
 <body>
   <div class="shell">
     <header>
-      <nav><a href="./">Local Exporters</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="https://github.com/Tokenyet/local_exporters/issues">Issues</a></nav>
+      <div class="prose-nav-row">
+        <nav><a href="./">Local Exporters</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="https://github.com/Tokenyet/local_exporters/issues">Issues</a></nav>
+        <div class="language-switcher" aria-label="Language"><a class="is-active" href="support.html?lang=en" lang="en">EN</a><a href="zh-TW/support.html?lang=zh-TW" lang="zh-Hant">正體</a></div>
+      </div>
       <div class="eyebrow">Support</div>
       <h1>Keep the local path understandable.</h1>
       <p class="lead">Most installation problems are caused by an old native host registration, a stale extension ID, or tools installed in a different toolchain location.</p>
@@ -18,7 +27,7 @@
       <h2>Clean reinstall</h2>
       <p>The manifests include stable public signing keys. Run <code>scripts\show-extension-ids.ps1</code> to inspect the fixed IDs if needed, then build the unpacked extensions, remove old native registrations, and register both native hosts in the Windows HTTPS default browser without passing IDs manually:</p>
       <pre><code>.\scripts\package-all.ps1
- .\scripts\clean-install.ps1</code></pre>
+.\scripts\clean-install.ps1</code></pre>
       <p>Use <code>-Browser all</code> when every supported browser should receive the native host registration.</p>
 
       <h2>Vivaldi on Windows</h2>

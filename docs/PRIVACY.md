@@ -1,6 +1,6 @@
 # Local Exporters Privacy Policy
 
-The canonical public version of this policy is [privacy.html](privacy.html).
+The canonical public versions of this policy are available in [English](privacy.html) and [Traditional Chinese](zh-TW/privacy.html).
 
 Local Exporters stores extension preferences in `chrome.storage.sync`. When a user starts an export, the extension sends the authorized page URL and selected options to its local Windows native messaging host. Downloads, conversion, subtitle processing, and Twitch chat export run through local tools.
 

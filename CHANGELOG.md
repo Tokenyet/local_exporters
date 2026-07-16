@@ -8,6 +8,7 @@
 - Added monorepo-wide tests, packaging, clean-install helpers, GitHub Actions CI/CD, and GitHub Pages documentation.
 - Redesigned the project website around the motivation for transcript-first livestream catch-up, with real exporter screenshots and local-processing architecture.
 - Refined website heading scale and screenshot proportions, and added distinct Twitch conversation-wave and YouTube video-transcript extension icons.
+- Added English and Traditional Chinese website pages with browser-language detection, a remembered manual language selector, localized support/privacy pages, and SEO language alternates.
 
 ## 0.1.0
 
