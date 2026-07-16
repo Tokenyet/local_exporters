@@ -10,6 +10,7 @@ param(
 $ErrorActionPreference = "Stop"
 $HostName = "com.dowen.twitch_local_exporter"
 $RegistryTargets = @()
+# Vivaldi on Windows uses Chromium's Chrome native-messaging registry root.
 if ($Browser -in @("chrome", "vivaldi", "all")) {
   $RegistryTargets += "HKCU\Software\Google\Chrome\NativeMessagingHosts\$HostName"
 }
@@ -26,7 +27,11 @@ if ($Browser -in @("vivaldi", "all")) {
 $RegistryTargets = $RegistryTargets | Select-Object -Unique
 
 foreach ($Target in $RegistryTargets) {
-  & reg.exe delete $Target /f 2>$null | Out-Null
+  try {
+    & reg.exe delete $Target /f 2>$null | Out-Null
+  } catch {
+    # Missing registry entries are expected during a clean install.
+  }
 }
 
 if ($RemoveFiles -and (Test-Path $AppDir)) {

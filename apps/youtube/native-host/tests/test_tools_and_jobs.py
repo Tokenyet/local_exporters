@@ -1,14 +1,17 @@
+import json
 import os
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from youtube_local_exporter.config import product_tools_dir, toolchain_mode, toolchain_root, tools_dir
 from youtube_local_exporter.jobs import choose_subtitle_from_probe_summary, interpolate_progress, newest_matching_output
 from youtube_local_exporter.cookies import format_cookie_row, normalize_cookies
-from youtube_local_exporter.tools import normalize_model_name, require_tools, yt_dlp_js_runtime_args
+from youtube_local_exporter.tools import normalize_model_name, require_tools, whisper_backend, yt_dlp_js_runtime_args
 
 
 class ToolsAndJobsTests(unittest.TestCase):
@@ -16,9 +19,61 @@ class ToolsAndJobsTests(unittest.TestCase):
         self.assertEqual(normalize_model_name("base"), "base")
         self.assertEqual(normalize_model_name("unknown"), "small")
 
+    def test_shared_toolchain_settings_are_resolved(self):
+        previous_localappdata = os.environ.get("LOCALAPPDATA")
+        previous_override = os.environ.pop("DOWEN_LOCAL_EXPORT_TOOLCHAIN_ROOT", None)
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                os.environ["LOCALAPPDATA"] = tmp
+                root = Path(tmp) / "com.dowen.local_exporter" / "toolchain"
+                settings_path = Path(tmp) / "com.dowen.local_exporter" / "settings.json"
+                settings_path.parent.mkdir(parents=True)
+                settings_path.write_text(json.dumps({
+                    "products": {
+                        "youtube": {"mode": "shared", "root": str(root)}
+                    }
+                }), encoding="utf-8")
+
+                self.assertEqual(toolchain_mode(), "shared")
+                self.assertEqual(toolchain_root(), root)
+                self.assertEqual(tools_dir(), root)
+                self.assertEqual(product_tools_dir(), root / "products" / "youtube")
+        finally:
+            if previous_localappdata is None:
+                os.environ.pop("LOCALAPPDATA", None)
+            else:
+                os.environ["LOCALAPPDATA"] = previous_localappdata
+            if previous_override is not None:
+                os.environ["DOWEN_LOCAL_EXPORT_TOOLCHAIN_ROOT"] = previous_override
+
     def test_require_tools_reports_missing(self):
         with self.assertRaisesRegex(RuntimeError, "definitely-missing-tool.exe"):
             require_tools(["definitely-missing-tool.exe"])
+
+    def test_whisper_backend_prefers_cuda_binary_when_cuda_is_available(self):
+        previous_localappdata = os.environ.get("LOCALAPPDATA")
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                os.environ["LOCALAPPDATA"] = tmp
+                root = Path(tmp) / "com.dowen.local_exporter" / "toolchain"
+                settings_path = root.parent / "settings.json"
+                settings_path.parent.mkdir(parents=True)
+                settings_path.write_text(json.dumps({
+                    "products": {"youtube": {"mode": "shared", "root": str(root)}}
+                }), encoding="utf-8")
+                (root / "whisper-cli.exe").parent.mkdir(parents=True)
+                (root / "whisper-cli.exe").touch()
+                (root / "cuda").mkdir(parents=True)
+                cuda_path = root / "cuda" / "whisper-cli.exe"
+                cuda_path.touch()
+
+                with patch("youtube_local_exporter.tools.cuda_available", return_value=True):
+                    self.assertEqual(whisper_backend(), ("cuda", cuda_path))
+        finally:
+            if previous_localappdata is None:
+                os.environ.pop("LOCALAPPDATA", None)
+            else:
+                os.environ["LOCALAPPDATA"] = previous_localappdata
 
     def test_js_runtime_args_are_valid_when_present(self):
         args = yt_dlp_js_runtime_args()

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Support · Local Exporters</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <nav><a href="./">Local Exporters</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="https://github.com/Tokenyet/local_exporters/issues">Issues</a></nav>
+      <div class="eyebrow">Support</div>
+      <h1>Keep the local path understandable.</h1>
+      <p class="lead">Most installation problems are caused by an old native host registration, a stale extension ID, or tools installed in a different toolchain location.</p>
+    </header>
+    <main>
+      <h2>Clean reinstall</h2>
+      <p>The manifests include stable public signing keys. Run <code>scripts\show-extension-ids.ps1</code> to inspect the fixed IDs if needed, then build the unpacked extensions, remove old native registrations, and register both native hosts in the Windows HTTPS default browser without passing IDs manually:</p>
+      <pre><code>.\scripts\package-all.ps1
+ .\scripts\clean-install.ps1</code></pre>
+      <p>Use <code>-Browser all</code> when every supported browser should receive the native host registration.</p>
+
+      <h2>Vivaldi on Windows</h2>
+      <p>Vivaldi uses Chromium's Chrome native-messaging registry root on Windows. The native host must therefore be registered under <code>HKCU\Software\Google\Chrome\NativeMessagingHosts</code>, not only under <code>HKCU\Software\Vivaldi\NativeMessagingHosts</code>. If the popup says the host is not connected after a clean install, restart Vivaldi and reload both unpacked extensions from <code>vivaldi://extensions</code>.</p>
+
+      <h2>Shared tools</h2>
+      <p><code>.scripts\clean-install.ps1</code> now runs both shared-toolchain updaters by default, so a complete reinstall includes native hosts and tools. The updaters first probe working CLI commands on <code>PATH</code> and avoid downloading duplicates; use <code>-ForceUpdate</code> to install bundled copies anyway. Use <code>-SkipUpdateTools</code> when you only need to repair host registration. The second updater reuses common files from <code>%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code>.</p>
+
+      <h2>Native host diagnostics</h2>
+      <p>Check the extension's native host status from its popup or run the product's native-host tests. The status includes the resolved toolchain mode and root. If an extension was reloaded from a new folder, reinstall the native host with the new extension ID.</p>
+
+      <h2>Report a problem</h2>
+      <p>Open an issue with the product name, Windows version, browser, extension version, and the smallest relevant error message. Do not attach cookies, access tokens, or private media URLs.</p>
+    </main>
+    <footer><a href="./">Home</a> · <a href="privacy.html">Privacy</a> · <a href="https://github.com/Tokenyet/local_exporters/issues">GitHub Issues</a></footer>
+  </div>
+</body>
+</html>

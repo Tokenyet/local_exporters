@@ -1,5 +1,6 @@
 const MESSAGE_TYPE = "twitch-local-exporter";
 const HOST_NAME = "com.dowen.twitch_local_exporter";
+const REQUIRED_HOST_TOOLS = new Set(["yt-dlp", "ffmpeg", "ffprobe", "javascript-runtime"]);
 
 const state = {
   mode: "video",
@@ -101,7 +102,9 @@ async function refreshAll() {
 async function pingHost() {
   try {
     const { response } = await sendMessage({ action: "ping" });
-    const missing = Object.values(response.tools || {}).filter((tool) => !tool.available);
+    const missing = Object.entries(response.tools || {})
+      .filter(([name]) => REQUIRED_HOST_TOOLS.has(name))
+      .filter(([, tool]) => !tool.available);
     setChip(
       elements["host-status"],
       missing.length ? "warn" : "ok",

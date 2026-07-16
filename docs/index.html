@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local Exporters</title>
+  <meta name="description" content="Windows-first Chromium extensions for local Twitch and YouTube exports.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <nav>
+        <a href="./">Local Exporters</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://github.com/Tokenyet/local_exporters">Source</a>
+      </nav>
+      <div class="eyebrow">Local-first browser tools</div>
+      <h1>Export the media you are authorized to keep.</h1>
+      <p class="lead">Local Exporters gives Twitch and YouTube their own focused Chromium extensions, backed by a shared Windows toolchain. Downloads, conversion, subtitles, and chat exports stay on your computer.</p>
+    </header>
+
+    <main>
+      <section class="grid" aria-label="Products">
+        <article class="card">
+          <span class="tag">Twitch</span>
+          <h2>Twitch Local Exporter</h2>
+          <p>Export authorized VOD video, audio, subtitles, and chat through a local native host.</p>
+          <p><a href="https://github.com/Tokenyet/local_exporters/tree/main/apps/twitch">View source and install notes →</a></p>
+        </article>
+        <article class="card">
+          <span class="tag">YouTube</span>
+          <h2>YouTube Local Exporter</h2>
+          <p>Export authorized YouTube video, audio, and subtitle files without a developer cloud service.</p>
+          <p><a href="https://github.com/Tokenyet/local_exporters/tree/main/apps/youtube">View source and install notes →</a></p>
+        </article>
+      </section>
+
+      <section>
+        <h2>One shared toolchain</h2>
+        <p>Both extensions reuse common downloads such as yt-dlp, Deno, FFmpeg, Whisper.cpp, and model files. The default location is:</p>
+        <pre><code>%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code></pre>
+        <p>Product-specific tools remain isolated under <code>products\twitch</code> and <code>products\youtube</code>. Shared, isolated, and custom locations are supported by the installers.</p>
+      </section>
+
+      <section>
+        <h2>Designed for local control</h2>
+        <div class="grid">
+          <div class="card"><h3>Browser UI</h3><p>Start an export from the active Twitch or YouTube page only when you choose to use the extension.</p></div>
+          <div class="card"><h3>Windows native host</h3><p>Run downloads, conversion, subtitles, and chat export locally with visible progress and cancellation.</p></div>
+          <div class="card"><h3>Independent products</h3><p>Each extension keeps its own permissions, native host, release package, and product-specific behavior.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer><a href="privacy.html">Privacy</a> · <a href="support.html">Support</a> · <a href="https://github.com/Tokenyet/local_exporters">GitHub</a></footer>
+  </div>
+</body>
+</html>

@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Iterable
 
 from . import __version__
-from .config import tools_dir, models_dir
+from .config import models_dir, product_tools_dir, toolchain_mode, toolchain_root, tools_dir
 
 
 @dataclass(frozen=True)
@@ -31,9 +31,12 @@ class Tool:
 
 
 def resolve_tool(executable: str) -> Tool:
-    bundled = tools_dir() / executable
-    if bundled.exists():
-        return Tool(executable.removesuffix(".exe"), executable, bundled, "bundled")
+    candidates = [product_tools_dir() / executable, tools_dir() / executable]
+    if executable == "whisper-cuda-cli.exe":
+        candidates.insert(0, tools_dir() / "cuda" / "whisper-cli.exe")
+    for bundled in candidates:
+        if bundled.exists():
+            return Tool(executable.removesuffix(".exe"), executable, bundled, "bundled")
 
     found = shutil.which(executable)
     if found:
@@ -82,12 +85,47 @@ def yt_dlp_js_runtime_args() -> list[str]:
     return ["--js-runtimes", f"{runtime}:{tool.path}"]
 
 
+def cuda_available() -> bool:
+    return shutil.which("nvidia-smi.exe") is not None or shutil.which("nvidia-smi") is not None
+
+
+def whisper_cli_supports_cuda(path: Path | None) -> bool:
+    if not path:
+        return False
+    try:
+        result = subprocess.run(
+            [str(path), "--help"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=10,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    output = f"{result.stdout}\n{result.stderr}".lower()
+    return result.returncode == 0 and ("cuda backend" in output or "cuda devices" in output)
+
+
+def whisper_backend() -> tuple[str, Path | None]:
+    cuda_tool = resolve_tool("whisper-cuda-cli.exe")
+    if cuda_tool.path and cuda_available():
+        return "cuda", cuda_tool.path
+
+    cpu_tool = resolve_tool("whisper-cli.exe")
+    if cpu_tool.path and cuda_available() and whisper_cli_supports_cuda(cpu_tool.path):
+        return "cuda", cpu_tool.path
+    return "cpu", cpu_tool.path
+
+
 def status(model: str = "small") -> dict[str, object]:
     tools = {
         "yt-dlp": resolve_tool("yt-dlp.exe").as_dict(),
         "ffmpeg": resolve_tool("ffmpeg.exe").as_dict(),
         "ffprobe": resolve_tool("ffprobe.exe").as_dict(),
-        "whisper-cli": resolve_tool("whisper-cli.exe").as_dict()
+        "whisper-cli": resolve_tool("whisper-cli.exe").as_dict(),
+        "whisper-cuda-cli": resolve_tool("whisper-cuda-cli.exe").as_dict()
     }
     runtime_name, runtime_tool = resolve_js_runtime()
     tools["javascript-runtime"] = {
@@ -102,10 +140,19 @@ def status(model: str = "small") -> dict[str, object]:
         "path": str(model_path) if model_path else "",
         "source": "bundled" if model_path else "missing"
     }
+    backend, backend_path = whisper_backend()
     return {
         "version": __version__,
         "toolsDir": str(tools_dir()),
-        "tools": tools
+        "toolchainRoot": str(toolchain_root()),
+        "toolchainMode": toolchain_mode(),
+        "tools": tools,
+        "whisper": {
+            "backend": backend,
+            "path": str(backend_path) if backend_path else "",
+            "cudaAvailable": cuda_available(),
+            "fallback": "cpu"
+        }
     }
 
 
@@ -129,6 +176,14 @@ def require_tools(names: Iterable[str], model: str = "small") -> dict[str, Path]
 
     if missing:
         raise RuntimeError(f"Missing required tool(s): {', '.join(missing)}")
+    return resolved
+
+
+def require_whisper_tools(model: str = "small") -> dict[str, Path]:
+    resolved = require_tools(["yt-dlp.exe", "ffmpeg.exe", "whisper-cli.exe", "model"], model)
+    cuda_tool = resolve_tool("whisper-cuda-cli.exe")
+    if cuda_tool.path:
+        resolved["whisper-cuda-cli.exe"] = cuda_tool.path
     return resolved
 
 

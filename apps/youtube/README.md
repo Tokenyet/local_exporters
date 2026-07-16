@@ -1,7 +1,9 @@
 # YouTube Local Exporter
 
-[![CI](https://github.com/Tokenyet/youtube_local_exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/Tokenyet/youtube_local_exporter/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/Tokenyet/youtube_local_exporter?include_prereleases)](https://github.com/Tokenyet/youtube_local_exporter/releases)
+> This extension is maintained in the [Local Exporters monorepo](../../README.md). The official site is <https://tokenyet.github.io/local_exporters/>.
+
+[![CI](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml/badge.svg)](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Tokenyet/local_exporters?include_prereleases)](https://github.com/Tokenyet/local_exporters/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0f766e.svg)](LICENSE)
 
 Turn the current YouTube tab into a local export pipeline.
@@ -22,7 +24,7 @@ No cloud transcription. No analytics. No generated media leaves your machine.
 
 ## Quick Start
 
-1. Download `youtube-local-exporter-vX.Y.Z-windows.zip` from [Releases](https://github.com/Tokenyet/youtube_local_exporter/releases).
+1. Download `youtube-local-exporter-vX.Y.Z-windows.zip` from the [Local Exporters Releases](https://github.com/Tokenyet/local_exporters/releases).
 2. Extract the ZIP.
 3. Open `chrome://extensions`, `edge://extensions`, or your Chromium browser's extensions page.
 4. Enable `Developer mode`.
@@ -74,7 +76,7 @@ The Manifest V3 extension reads the active YouTube tab only when you open the po
 - PowerShell.
 - Python 3.11 or newer if you install from source without the release-built native host executable.
 
-`update-tools.ps1` downloads helper tools into `%LOCALAPPDATA%\YouTubeLocalExporter\tools`:
+`update-tools.ps1` can install common helper tools into the shared `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain` directory:
 
 - `yt-dlp`
 - Deno for yt-dlp JavaScript challenge solving
@@ -82,11 +84,30 @@ The Manifest V3 extension reads the active YouTube tab only when you open the po
 - whisper.cpp
 - the selected Whisper model
 
+On NVIDIA Windows systems, `update-tools.ps1` uses `-WhisperAcceleration Auto` by default and also installs the CUDA/cuBLAS Whisper binary when `nvidia-smi` is available. Subtitle transcription prefers that GPU binary and retries with the CPU binary if CUDA startup fails:
+
+```powershell
+.\scripts\update-tools.ps1 -WhisperAcceleration Auto
+```
+
+Use `-WhisperAcceleration Cpu` to force CPU-only installation, or `Cuda` to require the CUDA package.
+
+The native installer supports three toolchain modes:
+
+```powershell
+.\scripts\install-native.ps1 -ExtensionId <extension-id> -ToolchainMode Shared
+.\scripts\update-tools.ps1 -ToolchainMode Shared
+```
+
+Use `-ToolchainMode Isolated` to keep the legacy `%LOCALAPPDATA%\YouTubeLocalExporter\tools` layout, or use `-ToolchainMode Custom -ToolchainRoot <path>` for another shared location. The selected mode is recorded in `%LOCALAPPDATA%\com.dowen.local_exporter\settings.json`. Existing files are reused on later runs; add `-ForceUpdate` to `update-tools.ps1` when you explicitly want to redownload common tools.
+
+Before downloading, the updater probes working CLI commands on `PATH` and reuses them when available. This applies to `yt-dlp`, Deno, FFmpeg/FFprobe, and Whisper. Use `-ForceUpdate` to force bundled copies.
+
 ## Install From Source
 
 ```powershell
-git clone https://github.com/Tokenyet/youtube_local_exporter.git
-cd youtube_local_exporter
+git clone https://github.com/Tokenyet/local_exporters.git
+cd local_exporters\apps\youtube
 .\scripts\package.ps1
 ```
 

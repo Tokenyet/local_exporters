@@ -1,0 +1,4 @@
+interface:
+  display_name: "Twitch VOD Summary"
+  short_description: "Summarize Twitch VODs with chat and Whisper"
+  default_prompt: "Use $twitch-vod-summary to summarize Twitch VOD URLs with local Whisper transcripts and chat."

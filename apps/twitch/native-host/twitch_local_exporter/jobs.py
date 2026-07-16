@@ -27,7 +27,7 @@ from .commands import (
 from .config import update_script_path
 from .cookies import temporary_cookie_file
 from .subtitle_text import convert_chinese_subtitle_file, should_convert_chinese_subtitles
-from .tools import require_tools
+from .tools import require_tools, require_whisper_tools, whisper_backend
 
 
 ProgressSink = Callable[[dict[str, Any]], None]
@@ -212,7 +212,7 @@ class JobManager:
         subtitles: dict[str, Any] | None = None,
         cookie_file: Path | None = None
     ) -> None:
-        tools = require_tools(["yt-dlp.exe", "ffmpeg.exe", "whisper-cli.exe", "model"], job.request.get("whisperModel") or "small")
+        tools = require_whisper_tools(job.request.get("whisperModel") or "small")
         with tempfile.TemporaryDirectory(prefix="twitch-local-exporter-") as temp:
             temp_dir = Path(temp)
             audio_template = temp_dir / "source.%(ext)s"
@@ -232,20 +232,37 @@ class JobManager:
                 45,
                 55
             )
-            self._run_command(
-                job,
-                build_whisper_command(
-                    tools["whisper-cli.exe"],
-                    tools["model"],
-                    wav_path,
-                    output_base,
-                    language,
-                    subtitle_format
-                ),
-                "postprocess",
-                55,
-                98
+            backend, whisper_cli = whisper_backend()
+            command = build_whisper_command(
+                whisper_cli or tools["whisper-cli.exe"],
+                tools["model"],
+                wav_path,
+                output_base,
+                language,
+                subtitle_format
             )
+            try:
+                self._run_command(job, command, "postprocess", 55, 98)
+            except RuntimeError:
+                if backend != "cuda" or whisper_cli == tools["whisper-cli.exe"]:
+                    raise
+                for extension in ("srt", "vtt"):
+                    Path(f"{output_base}.{extension}").unlink(missing_ok=True)
+                self._emit(job, "postprocess", 56, "GPU Whisper failed; retrying with CPU")
+                self._run_command(
+                    job,
+                    build_whisper_command(
+                        tools["whisper-cli.exe"],
+                        tools["model"],
+                        wav_path,
+                        output_base,
+                        language,
+                        subtitle_format
+                    ),
+                    "postprocess",
+                    56,
+                    98
+                )
         output = Path(f"{output_base}.{subtitle_format}")
         if not output.exists():
             output = newest_matching_output(output_base.parent, output_base.name, [subtitle_format])

@@ -15,6 +15,7 @@ function assert(condition, message) {
 
 const manifest = readJson("manifest.json");
 assert(manifest.manifest_version === 3, "manifest_version must be 3");
+assert(typeof manifest.key === "string" && /^[A-Za-z0-9+/]+=*$/.test(manifest.key), "manifest must contain a stable public signing key");
 assert(manifest.permissions.includes("nativeMessaging"), "manifest must request nativeMessaging");
 assert(
   manifest.host_permissions.every((value) => value.includes("youtube.com") || value.includes("youtu.be") || value.includes("google.com")),

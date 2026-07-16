@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy · Local Exporters</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <nav><a href="./">Local Exporters</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="https://github.com/Tokenyet/local_exporters">Source</a></nav>
+      <div class="eyebrow">Privacy</div>
+      <h1>Local processing, clear boundaries.</h1>
+      <p class="lead">Local Exporters is designed to keep generated media and native processing on the user's Windows computer.</p>
+    </header>
+    <main>
+      <h2>What is stored</h2>
+      <p>Each extension stores user preferences in <code>chrome.storage.sync</code>, such as output folder text, export mode, file format preferences, chat settings for Twitch, and subtitle settings.</p>
+
+      <h2>What leaves the browser</h2>
+      <p>When the user starts an export, the extension sends the authorized page URL and selected export options to its local native messaging host. The native host uses local helper tools to retrieve and convert the requested content.</p>
+
+      <h2>What is not collected</h2>
+      <p>The project does not operate analytics, advertising, cloud transcription, or a developer upload service for generated media. Exported files and downloaded helper tools remain on the user's selected local storage.</p>
+
+      <h2>User responsibility</h2>
+      <p>Use the extensions only for content you own or are authorized to export. The third-party sites and tools used during an export may have their own terms and privacy policies.</p>
+
+      <h2>Questions</h2>
+      <p>See the <a href="support.html">support page</a> or open an issue in the <a href="https://github.com/Tokenyet/local_exporters">source repository</a>. Do not include cookies, access tokens, or private media URLs.</p>
+    </main>
+    <footer><a href="./">Home</a> · <a href="support.html">Support</a> · <a href="https://github.com/Tokenyet/local_exporters">GitHub</a></footer>
+  </div>
+</body>
+</html>

@@ -22,7 +22,9 @@ Responses echo `id` for direct requests. Job updates are pushed as standalone me
 Bundled tools are preferred from:
 
 ```text
-%LOCALAPPDATA%\YouTubeLocalExporter\tools
+Shared mode: `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain`
+
+Isolated mode: `%LOCALAPPDATA%\YouTubeLocalExporter\tools`
 ```
 
 The host falls back to PATH for development when a bundled executable is missing.
@@ -35,6 +37,7 @@ Required tools:
 - `ffprobe.exe`
 - `whisper-cli.exe`
 - `models\ggml-small.bin` by default
+- optional `cuda\whisper-cli.exe` for NVIDIA CUDA; selected automatically when `nvidia-smi` is available, with CPU retry on CUDA startup failure
 
 ## Output Naming
 

@@ -1,7 +1,9 @@
 # Twitch Local Exporter
 
-[![CI](https://github.com/Tokenyet/twitch_local_exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/Tokenyet/twitch_local_exporter/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/Tokenyet/twitch_local_exporter?include_prereleases)](https://github.com/Tokenyet/twitch_local_exporter/releases)
+> This extension is maintained in the [Local Exporters monorepo](../../README.md). The official site is <https://tokenyet.github.io/local_exporters/>.
+
+[![CI](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml/badge.svg)](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Tokenyet/local_exporters?include_prereleases)](https://github.com/Tokenyet/local_exporters/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0f766e.svg)](LICENSE)
 
 Turn the current Twitch VOD tab into a local export pipeline.
@@ -79,7 +81,33 @@ The flow is: **Twitch VOD tab → extension popup → Windows native host → lo
 - Python 3.11 or newer if you install from source without the release-built native host executable.
 - `opencc-python-reimplemented`, installed automatically by `install-native.ps1` for source-based Python host installs.
 
-`update-tools.ps1` downloads helper tools into `%LOCALAPPDATA%\TwitchLocalExporter\tools`:
+Subtitle export automatically prefers the NVIDIA CUDA/cuBLAS whisper.cpp binary when the toolchain was updated on a machine with `nvidia-smi`. If CUDA startup fails, the native host retries the same transcription with the CPU binary:
+
+```powershell
+.\scripts\update-tools.ps1 -WhisperAcceleration Auto
+```
+
+Use `-WhisperAcceleration Cpu` to force CPU-only installation, or `Cuda` to require the CUDA package.
+
+For local VOD summaries, the exporter also supports an NVIDIA CUDA backend through faster-whisper. Install it into the selected local exporter toolchain and verify that CUDA is visible:
+
+```powershell
+.\\scripts\\install-gpu-whisper.ps1 -ToolchainMode Shared
+```
+
+Then run the summary exporter with the GPU backend:
+
+```powershell
+$GpuPython = Join-Path $env:LOCALAPPDATA "com.dowen.local_exporter\\toolchain\\runtimes\\faster-whisper\\Scripts\\python.exe"
+& $GpuPython skills\\twitch-vod-summary\\scripts\\export_vod_summary.py `
+  --whisper-backend faster-whisper --faster-whisper-device cuda `
+  --faster-whisper-compute-type float16 --workers 1 `
+  https://www.twitch.tv/videos/<vod-id>
+```
+
+The original whisper.cpp CPU backend remains available with the default options.
+
+`update-tools.ps1` can install common helper tools into the shared `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain` directory:
 
 - `yt-dlp`
 - TwitchDownloaderCLI
@@ -88,11 +116,22 @@ The flow is: **Twitch VOD tab → extension popup → Windows native host → lo
 - whisper.cpp
 - the selected Whisper model
 
+The native installer supports three toolchain modes:
+
+```powershell
+.\scripts\install-native.ps1 -ExtensionId <extension-id> -ToolchainMode Shared
+.\scripts\update-tools.ps1 -ToolchainMode Shared
+```
+
+Use `-ToolchainMode Isolated` to keep the legacy `%LOCALAPPDATA%\TwitchLocalExporter\tools` layout, or use `-ToolchainMode Custom -ToolchainRoot <path>` for another shared location. The selected mode is recorded in `%LOCALAPPDATA%\com.dowen.local_exporter\settings.json`; Twitch-only `TwitchDownloaderCLI` files are kept under the shared toolchain's `products\twitch` folder. Existing files are reused on later runs; add `-ForceUpdate` to `update-tools.ps1` when you explicitly want to redownload common tools.
+
+Before downloading, the updater probes working CLI commands on `PATH` and reuses them when available. This applies to `yt-dlp`, Deno, FFmpeg/FFprobe, Whisper, and TwitchDownloaderCLI. Use `-ForceUpdate` to force bundled copies.
+
 ## Install From Source
 
 ```powershell
-git clone https://github.com/Tokenyet/twitch_local_exporter.git
-cd twitch_local_exporter
+git clone https://github.com/Tokenyet/local_exporters.git
+cd local_exporters\apps\twitch
 .\scripts\package.ps1
 ```
 

@@ -12,6 +12,7 @@ Initial public release.
 - Windows native messaging host with local output folders, helper tool detection, job progress, cancellation, and output folder opening.
 - Installer and uninstaller scripts for Chrome, Edge, Chromium, and Vivaldi native messaging registry entries.
 - Tool updater for yt-dlp, Deno, FFmpeg/FFprobe, whisper.cpp, and Whisper models.
+- Automatic NVIDIA CUDA/cuBLAS Whisper binary selection with CPU fallback for subtitle export.
 - GitHub Actions CI and tag-driven release packaging.
 
 ### Release Assets
