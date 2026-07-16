@@ -9,13 +9,19 @@ The repository contains two independent extensions:
 
 They share the local toolchain layout and release infrastructure, but keep separate manifests, permissions, native hosts, product behavior, versions, and release artifacts.
 
+## Why this exists
+
+I built Local Exporters because livestreams are often difficult to catch up on. Some YouTube livestreams have no subtitles, which means there is no transcript to review or give to an AI summarizer. For Twitch, I often follow chat-focused streamers but do not always have time to watch live; subtitles and VOD chat make it possible to understand what was discussed and build an outline before deciding which parts to watch.
+
+The project does not send content to an AI provider. It creates local subtitle, chat, audio, and video files that you can inspect or use with the summarization tool you choose.
+
 ## Official site
 
 The project website is published through GitHub Pages:
 
-<https://tokenyet.github.io/local_exporters/>
+<https://www.dowen.idv.tw/local_exporters/>
 
-It includes the product overview, support notes, and privacy policy.
+It includes the motivation behind the project, real exporter screenshots, technical architecture, support notes, and privacy policy.
 
 ## Quick start
 

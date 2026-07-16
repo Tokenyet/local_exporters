@@ -8,9 +8,9 @@ These notes apply separately to the Twitch and YouTube extension packages. They 
 - **Remote code:** No remote JavaScript or executable code is loaded by the extension. Local helper binaries are invoked by the native host after installation.
 - **Data use:** The extension stores user preferences in `chrome.storage.sync` and sends the user-selected page URL/options to the local native host when an export is explicitly started.
 - **Developer service:** Generated media is not uploaded to a developer-operated service, and the project does not run analytics or advertising.
-- **Privacy policy:** `https://tokenyet.github.io/local_exporters/privacy.html`
-- **Homepage:** `https://tokenyet.github.io/local_exporters/`
-- **Support:** `https://tokenyet.github.io/local_exporters/support.html`
+- **Privacy policy:** `https://www.dowen.idv.tw/local_exporters/privacy.html`
+- **Homepage:** `https://www.dowen.idv.tw/local_exporters/`
+- **Support:** `https://www.dowen.idv.tw/local_exporters/support.html`
 
 ## Twitch permission justifications
 

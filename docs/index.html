@@ -3,58 +3,312 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Local Exporters</title>
-  <meta name="description" content="Windows-first Chromium extensions for local Twitch and YouTube exports.">
+  <title>Local Exporters · Twitch & YouTube transcripts for local review</title>
+  <meta name="description" content="Export authorized Twitch and YouTube video, audio, subtitles, and chat locally. Create transcripts for missed livestreams, personal review, and AI summaries without uploading media to a developer service.">
+  <meta name="keywords" content="Twitch transcript, Twitch VOD summary, YouTube livestream subtitles, Whisper subtitles, local AI summary, Twitch chat export, YouTube transcript exporter">
+  <meta name="theme-color" content="#14243d">
+  <link rel="canonical" href="https://www.dowen.idv.tw/local_exporters/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Local Exporters · Catch up on the streams you missed">
+  <meta property="og:description" content="Create local Twitch and YouTube transcripts for review and AI summaries, with Whisper and media processing on your Windows PC.">
+  <meta property="og:url" content="https://www.dowen.idv.tw/local_exporters/">
   <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Local Exporters",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Windows",
+    "description": "Chromium extensions for exporting authorized Twitch and YouTube media, subtitles, and chat to local files for review and summarization.",
+    "url": "https://www.dowen.idv.tw/local_exporters/",
+    "codeRepository": "https://github.com/Tokenyet/local_exporters",
+    "isAccessibleForFree": true
+  }
+  </script>
 </head>
-<body>
-  <div class="shell">
-    <header>
-      <nav>
-        <a href="./">Local Exporters</a>
+<body class="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="site-wrap">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Local Exporters home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span>Local Exporters</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#motivation">Why I built it</a>
+        <a href="#products">Screenshots</a>
+        <a href="#architecture">How it works</a>
         <a href="support.html">Support</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="https://github.com/Tokenyet/local_exporters">Source</a>
+        <a class="nav-source" href="https://github.com/Tokenyet/local_exporters">GitHub</a>
       </nav>
-      <div class="eyebrow">Local-first browser tools</div>
-      <h1>Export the media you are authorized to keep.</h1>
-      <p class="lead">Local Exporters gives Twitch and YouTube their own focused Chromium extensions, backed by a shared Windows toolchain. Downloads, conversion, subtitles, and chat exports stay on your computer.</p>
     </header>
 
-    <main>
-      <section class="grid" aria-label="Products">
-        <article class="card">
-          <span class="tag">Twitch</span>
-          <h2>Twitch Local Exporter</h2>
-          <p>Export authorized VOD video, audio, subtitles, and chat through a local native host.</p>
-          <p><a href="https://github.com/Tokenyet/local_exporters/tree/main/apps/twitch">View source and install notes →</a></p>
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="status-pill"><span></span> Open source · Windows · Local processing</div>
+          <p class="kicker">For livestreams worth catching up on</p>
+          <h1>Turn a missed stream into something you can actually review.</h1>
+          <p class="hero-lead">Export subtitles, media, and Twitch chat to local files. When a livestream has no usable transcript, Whisper can create one—ready for reading, outlining, or the AI summarizer you choose.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://github.com/Tokenyet/local_exporters/releases">Download releases</a>
+            <a class="button button-secondary" href="#products">See the exporters</a>
+          </div>
+          <p class="hero-note">The extensions do not send your media to an AI service. They create local files that you control.</p>
+        </div>
+
+        <div class="hero-visual" aria-label="From missed livestream to useful local transcript">
+          <div class="visual-orbit orbit-one"></div>
+          <div class="visual-orbit orbit-two"></div>
+          <div class="stream-card">
+            <div class="stream-topline">
+              <span class="live-dot"></span>
+              <span>Livestream replay</span>
+              <span class="stream-time">02:14:38</span>
+            </div>
+            <div class="stream-stage">
+              <span class="wave wave-a"></span>
+              <span class="wave wave-b"></span>
+              <span class="wave wave-c"></span>
+              <span class="wave wave-d"></span>
+              <span class="wave wave-e"></span>
+              <span class="wave wave-f"></span>
+              <span class="wave wave-g"></span>
+              <span class="wave wave-h"></span>
+            </div>
+            <div class="stream-problem">
+              <span class="problem-icon">CC</span>
+              <div>
+                <strong>No subtitles available</strong>
+                <small>No transcript for summarization</small>
+              </div>
+            </div>
+          </div>
+          <div class="transcript-card">
+            <div class="file-head">
+              <span class="file-icon">SRT</span>
+              <div><strong>stream-transcript.srt</strong><small>Generated locally with Whisper</small></div>
+            </div>
+            <div class="transcript-lines" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="ready-row"><span>Ready to review</span><strong>100%</strong></div>
+          </div>
+          <div class="summary-card">
+            <span class="summary-spark">✦</span>
+            <div><strong>Your next step</strong><small>Read it, outline it, or summarize it</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="motivation section-block" id="motivation">
+        <div class="section-heading">
+          <p class="kicker">Why I built this</p>
+          <h2>The useful part of a livestream is often the part you did not have time to watch.</h2>
+          <p>I kept reaching the same dead end: there was a stream I wanted to catch up on, but no transcript existed. Without text, an AI summarizer had nothing reliable to work with. Local Exporters started as a practical way around that problem.</p>
+        </div>
+
+        <div class="motivation-grid">
+          <article class="motive-card motive-youtube">
+            <div class="motive-label"><span class="platform-dot"></span>YouTube</div>
+            <p class="motive-problem">“There is a livestream I want to understand, but it has no subtitles.”</p>
+            <h3>No subtitles means no transcript—and no useful summary.</h3>
+            <p>YouTube Local Exporter first uses available captions. When they are missing, it can run Whisper locally and produce SRT or VTT files that can be reviewed or passed to a summarization tool.</p>
+            <ul class="feature-list">
+              <li>Use YouTube captions when available</li>
+              <li>Generate missing subtitles with local Whisper</li>
+              <li>Export video or audio when more context is needed</li>
+            </ul>
+          </article>
+
+          <article class="motive-card motive-twitch">
+            <div class="motive-label"><span class="platform-dot"></span>Twitch</div>
+            <p class="motive-problem">“I follow chat-focused streamers, but sometimes I cannot be there live.”</p>
+            <h3>I wanted to know what people had been talking about.</h3>
+            <p>Twitch Local Exporter turns a VOD into subtitles and optional chat logs, giving long conversational streams enough structure to build an outline and decide which parts are worth watching.</p>
+            <ul class="feature-list">
+              <li>Create subtitles from the VOD audio</li>
+              <li>Export chat as JSON, HTML, or plain text</li>
+              <li>Keep conversation context beside the transcript</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="boundary-note">
+          <span class="boundary-icon" aria-hidden="true">↗</span>
+          <p><strong>Local Exporters prepares the source material; it does not choose an AI provider for you.</strong> The transcript, chat, audio, and video stay as ordinary files on your computer, so you decide what happens next.</p>
+        </div>
+      </section>
+
+      <section class="products section-block" id="products">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="kicker">The exporters</p>
+            <h2>Focused controls for the page you are already watching.</h2>
+          </div>
+          <p>Each product is an independent Chromium extension with its own permissions, native host, and release package. Both use the same calm, task-focused export flow.</p>
+        </div>
+
+        <article class="product-showcase product-twitch">
+          <div class="product-copy">
+            <div class="product-name"><span class="product-number">01</span><span>Twitch Local Exporter</span></div>
+            <h3>VOD media, subtitles, and chat—kept together.</h3>
+            <p>Choose video, audio, subtitles, or chat from the popup. Progress and cancellation stay visible while the Windows native host performs the work.</p>
+            <div class="output-chips">
+              <span>MP4</span><span>Audio</span><span>SRT / VTT</span><span>Chat JSON / HTML / TXT</span>
+            </div>
+            <a class="text-link" href="https://github.com/Tokenyet/local_exporters/tree/main/apps/twitch">Twitch source and install notes <span>→</span></a>
+          </div>
+          <figure class="screenshot-stage">
+            <div class="screenshot-glow"></div>
+            <div class="window-bar"><span></span><span></span><span></span><small>Extension popup</small></div>
+            <img src="assets/twitch-popup-export.png" width="360" height="690" alt="Twitch Local Exporter popup showing video, audio, subtitles, chat, local output folder, and export progress" loading="lazy">
+            <figcaption>Actual Twitch exporter interface</figcaption>
+          </figure>
         </article>
-        <article class="card">
-          <span class="tag">YouTube</span>
-          <h2>YouTube Local Exporter</h2>
-          <p>Export authorized YouTube video, audio, and subtitle files without a developer cloud service.</p>
-          <p><a href="https://github.com/Tokenyet/local_exporters/tree/main/apps/youtube">View source and install notes →</a></p>
+
+        <article class="product-showcase product-youtube">
+          <div class="product-copy">
+            <div class="product-name"><span class="product-number">02</span><span>YouTube Local Exporter</span></div>
+            <h3>Get a transcript even when the stream did not provide one.</h3>
+            <p>Prefer YouTube subtitles, fall back to local Whisper, or force transcription. The same popup can export the source video or an audio-only file.</p>
+            <div class="output-chips">
+              <span>MP4</span><span>M4A / MP3 / OPUS / WAV</span><span>SRT / VTT</span>
+            </div>
+            <a class="text-link" href="https://github.com/Tokenyet/local_exporters/tree/main/apps/youtube">YouTube source and install notes <span>→</span></a>
+          </div>
+          <figure class="screenshot-stage">
+            <div class="screenshot-glow"></div>
+            <div class="window-bar"><span></span><span></span><span></span><small>Extension popup</small></div>
+            <img src="assets/youtube-popup-export.png" width="330" height="579" alt="YouTube Local Exporter popup showing local video export settings and progress" loading="lazy">
+            <figcaption>Actual YouTube exporter interface</figcaption>
+          </figure>
         </article>
       </section>
 
-      <section>
-        <h2>One shared toolchain</h2>
-        <p>Both extensions reuse common downloads such as yt-dlp, Deno, FFmpeg, Whisper.cpp, and model files. The default location is:</p>
-        <pre><code>%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code></pre>
-        <p>Product-specific tools remain isolated under <code>products\twitch</code> and <code>products\youtube</code>. Shared, isolated, and custom locations are supported by the installers.</p>
+      <section class="architecture section-block" id="architecture">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="kicker">Technical concept</p>
+            <h2>The browser asks. Windows does the work.</h2>
+          </div>
+          <p>The extension is intentionally thin. Downloading, remuxing, transcription, chat export, progress, and cancellation run through a local native messaging host.</p>
+        </div>
+
+        <div class="flow" aria-label="Local Exporters technical flow">
+          <div class="flow-step">
+            <span class="flow-number">1</span>
+            <strong>Active tab</strong>
+            <small>The URL and selected settings</small>
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step">
+            <span class="flow-number">2</span>
+            <strong>Extension popup</strong>
+            <small>User starts an explicit export</small>
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step flow-local">
+            <span class="flow-number">3</span>
+            <strong>Windows native host</strong>
+            <small>Jobs, status, progress, cancellation</small>
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step flow-tools">
+            <span class="flow-number">4</span>
+            <strong>Local toolchain</strong>
+            <small>yt-dlp · FFmpeg · Whisper · Deno</small>
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-step flow-output">
+            <span class="flow-number">5</span>
+            <strong>Your files</strong>
+            <small>Media · subtitles · Twitch chat</small>
+          </div>
+        </div>
+
+        <div class="tech-grid">
+          <article class="tech-card">
+            <span class="tech-icon tech-blue">GPU</span>
+            <h3>Whisper chooses the useful backend</h3>
+            <p>On NVIDIA systems, the host prefers the CUDA/cuBLAS Whisper binary. If CUDA startup fails—or no NVIDIA GPU is present—it falls back to CPU transcription.</p>
+          </article>
+          <article class="tech-card">
+            <span class="tech-icon tech-green">CLI</span>
+            <h3>Existing tools are reused</h3>
+            <p>Clean install probes working CLI commands already available on <code>PATH</code>. Bundled downloads are installed only when a required tool is missing or unusable.</p>
+          </article>
+          <article class="tech-card">
+            <span class="tech-icon tech-orange">PC</span>
+            <h3>Processing stays local</h3>
+            <p>There is no developer media-upload service or cloud transcription backend. Generated files are written to the output folder you select.</p>
+          </article>
+        </div>
+
+        <div class="architecture-gallery">
+          <details class="architecture-card">
+            <summary>
+              <span><strong>Twitch architecture</strong><small>Includes subtitles and VOD chat export</small></span>
+              <span class="summary-action">View diagram</span>
+            </summary>
+            <img src="assets/twitch-how-it-works.png" width="1280" height="720" alt="Detailed Twitch Local Exporter architecture from browser extension to Windows native host and local tools" loading="lazy">
+          </details>
+          <details class="architecture-card">
+            <summary>
+              <span><strong>YouTube architecture</strong><small>Media and transcription stay on the local computer</small></span>
+              <span class="summary-action">View diagram</span>
+            </summary>
+            <img src="assets/youtube-how-it-works.png" width="1680" height="941" alt="Detailed YouTube Local Exporter architecture from browser extension to local Windows tools and output files" loading="lazy">
+          </details>
+        </div>
       </section>
 
-      <section>
-        <h2>Designed for local control</h2>
-        <div class="grid">
-          <div class="card"><h3>Browser UI</h3><p>Start an export from the active Twitch or YouTube page only when you choose to use the extension.</p></div>
-          <div class="card"><h3>Windows native host</h3><p>Run downloads, conversion, subtitles, and chat export locally with visible progress and cancellation.</p></div>
-          <div class="card"><h3>Independent products</h3><p>Each extension keeps its own permissions, native host, release package, and product-specific behavior.</p></div>
+      <section class="toolchain section-block">
+        <div class="toolchain-copy">
+          <p class="kicker">One shared toolchain</p>
+          <h2>Download common tools once. Keep product behavior separate.</h2>
+          <p>Both extensions can share yt-dlp, Deno, FFmpeg, Whisper.cpp, and model files while retaining independent manifests, permissions, native hosts, and product-specific tools.</p>
+          <code class="path-block">%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code>
+        </div>
+        <div class="tool-stack" aria-label="Shared local tools">
+          <div><span>01</span><strong>yt-dlp</strong><small>media retrieval</small></div>
+          <div><span>02</span><strong>FFmpeg</strong><small>conversion & remux</small></div>
+          <div><span>03</span><strong>Whisper.cpp</strong><small>local transcription</small></div>
+          <div><span>04</span><strong>Deno</strong><small>YouTube runtime support</small></div>
+        </div>
+      </section>
+
+      <section class="closing">
+        <div>
+          <p class="kicker">Catch up on your own terms</p>
+          <h2>Make the transcript first. Decide what deserves your time second.</h2>
+        </div>
+        <div class="closing-actions">
+          <a class="button button-light" href="https://github.com/Tokenyet/local_exporters/releases">Browse downloads</a>
+          <a class="button button-ghost" href="support.html">Installation support</a>
         </div>
       </section>
     </main>
 
-    <footer><a href="privacy.html">Privacy</a> · <a href="support.html">Support</a> · <a href="https://github.com/Tokenyet/local_exporters">GitHub</a></footer>
+    <footer class="site-footer">
+      <div>
+        <a class="brand footer-brand" href="./">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>Local Exporters</span>
+        </a>
+        <p>Local tools for authorized Twitch and YouTube exports.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+        <a href="https://github.com/Tokenyet/local_exporters/releases">Releases</a>
+        <a href="https://github.com/Tokenyet/local_exporters">GitHub</a>
+      </nav>
+    </footer>
   </div>
 </body>
 </html>

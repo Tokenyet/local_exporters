@@ -1,6 +1,6 @@
 # YouTube Local Exporter
 
-> This extension is maintained in the [Local Exporters monorepo](../../README.md). The official site is <https://tokenyet.github.io/local_exporters/>.
+> This extension is maintained in the [Local Exporters monorepo](../../README.md). The official site is <https://www.dowen.idv.tw/local_exporters/>.
 
 [![CI](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml/badge.svg)](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Tokenyet/local_exporters?include_prereleases)](https://github.com/Tokenyet/local_exporters/releases)
@@ -13,6 +13,12 @@ YouTube Local Exporter is a Windows-first Chromium extension that exports video,
 No cloud transcription. No analytics. No generated media leaves your machine.
 
 ![Animated demo showing a YouTube tab export flow that writes local video, audio, and subtitle files](docs/assets/demo.gif)
+
+## Why I Built It
+
+I kept finding YouTube livestreams that looked worth catching up on but had no subtitles. Without a transcript, an AI summarizer has no reliable source text to work from. This extension uses available YouTube captions first and can generate missing subtitles locally with Whisper, producing ordinary SRT or VTT files for review or use with the summarization tool you choose.
+
+The extension prepares local files only; it does not upload the video or transcript to an AI provider.
 
 ## Why Use It
 

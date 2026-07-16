@@ -1,6 +1,6 @@
 # Twitch Local Exporter
 
-> This extension is maintained in the [Local Exporters monorepo](../../README.md). The official site is <https://tokenyet.github.io/local_exporters/>.
+> This extension is maintained in the [Local Exporters monorepo](../../README.md). The official site is <https://www.dowen.idv.tw/local_exporters/>.
 
 [![CI](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml/badge.svg)](https://github.com/Tokenyet/local_exporters/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Tokenyet/local_exporters?include_prereleases)](https://github.com/Tokenyet/local_exporters/releases)
@@ -13,6 +13,12 @@ Twitch Local Exporter is a Windows-first Chromium extension that exports video, 
 No cloud transcription. No analytics. Generated media and chat logs stay on your machine.
 
 ![Animated demo showing a Twitch VOD export flow that writes local video, subtitle, and chat files](docs/assets/demo.gif)
+
+## Why I Built It
+
+I often follow chat-focused Twitch streamers, but sometimes I do not have time to watch live. I wanted a practical way to learn what had been discussed without scrubbing through an entire VOD first. Exported subtitles and optional VOD chat provide enough source material to build an outline, search for topics, or use a separate AI summarizer.
+
+The extension prepares local files only; it does not upload the VOD or transcript to an AI provider.
 
 ## Why Use It
 
