@@ -22,7 +22,7 @@ from .commands import (
     output_base_path,
     run_probe,
 )
-from .config import update_script_path
+from .config import update_script_command, update_script_path
 from .cookies import temporary_cookie_file
 from .tools import require_tools, require_whisper_tools, whisper_backend
 
@@ -244,14 +244,7 @@ class JobManager:
 
     def _run_update_tools(self, job: Job, script: Path) -> None:
         try:
-            command = [
-                "powershell.exe",
-                "-NoProfile",
-                "-ExecutionPolicy",
-                "Bypass",
-                "-File",
-                str(script)
-            ]
+            command = update_script_command(script)
             self._run_command(job, command, "progress", 5, 95)
             self._emit(job, "done", 100, "Tools updated")
         except Cancelled:

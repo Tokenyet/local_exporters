@@ -20,7 +20,7 @@
   "outputDir": { "message": "輸出資料夾" },
   "chooseFolder": { "message": "選擇..." },
   "openingFolderPicker": { "message": "開啟中..." },
-  "openingFolderPickerDetail": { "message": "請在 Windows 視窗中選擇輸出資料夾。" },
+  "openingFolderPickerDetail": { "message": "請在系統視窗中選擇輸出資料夾。" },
   "folderPickerCancelled": { "message": "已取消選擇資料夾。" },
   "askOutputDirOnExport": { "message": "每次匯出前詢問" },
   "useBrowserCookies": { "message": "使用瀏覽器 cookies" },

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import json
+import sys
 from pathlib import Path
 
 
@@ -15,6 +16,8 @@ def app_dir() -> Path:
     root = os.environ.get("LOCALAPPDATA")
     if root:
         return Path(root) / APP_NAME
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Application Support" / APP_NAME
     return Path.home() / ".youtube-local-exporter"
 
 
@@ -34,6 +37,8 @@ def shared_state_dir() -> Path:
     root = os.environ.get("LOCALAPPDATA")
     if root:
         return Path(root) / SHARED_STATE_NAME
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Application Support" / SHARED_STATE_NAME
     return Path.home() / ".com.dowen.local_exporter"
 
 
@@ -85,4 +90,18 @@ def default_output_dir() -> Path:
 
 
 def update_script_path() -> Path:
-    return app_dir() / "scripts" / "update-tools.ps1"
+    script_name = "update-tools.ps1" if sys.platform == "win32" else "update-tools.sh"
+    return app_dir() / "scripts" / script_name
+
+
+def update_script_command(script: Path) -> list[str]:
+    if script.suffix.lower() == ".ps1":
+        return [
+            "powershell.exe",
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(script)
+        ]
+    return ["/bin/sh", str(script)]

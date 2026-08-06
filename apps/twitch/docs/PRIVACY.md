@@ -4,6 +4,6 @@ Twitch Local Exporter stores extension preferences in `chrome.storage.sync`, inc
 
 Media, subtitle, and chat export jobs are processed locally by the native host. The extension does not collect analytics, send generated media to a remote service, or use cloud transcription.
 
-The native host writes exported files to the selected local output folder and stores common helper tools under `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain`; Twitch-only tools are stored under its product directory.
+The native host writes exported files to the selected local output folder and stores common helper tools under `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain` on Windows or `~/Library/Application Support/com.dowen.local_exporter/toolchain` on macOS; Twitch-only tools are stored under its product directory.
 
 Use this tool only for Twitch VODs you own or are authorized to export.

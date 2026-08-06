@@ -1,6 +1,6 @@
 # Local Exporters
 
-Local Exporters is a Windows-first Chromium extension suite for exporting authorized Twitch and YouTube content to local files.
+Local Exporters is a Chromium extension suite for Windows and macOS that exports authorized Twitch and YouTube content to local files.
 
 The repository contains two independent extensions:
 
@@ -27,7 +27,7 @@ The website is available in English and Traditional Chinese. On a first visit, b
 
 ## Quick start
 
-From PowerShell on Windows:
+On Windows, run from PowerShell:
 
 ```powershell
 .\scripts\package-all.ps1
@@ -54,9 +54,21 @@ The default shared toolchain is:
 %LOCALAPPDATA%\com.dowen.local_exporter\toolchain
 ```
 
-Common tools and models are stored once. Product-specific tools live below `products\twitch` or `products\youtube`. Use `-ToolchainMode Isolated` to retain the legacy app-specific layout, or `-ToolchainMode Custom -ToolchainRoot <path>` for another location. Existing files are reused; pass `-ForceUpdate` when a redownload is intentional.
+On macOS, use the shell entry points:
 
-The tool updaters also probe working CLI commands already available on `PATH` (`yt-dlp`, Deno, FFmpeg/FFprobe, Whisper, and TwitchDownloaderCLI). A successful version/help probe lets the native host use that external executable without downloading a duplicate; `-ForceUpdate` overrides this reuse and installs bundled copies.
+```bash
+./scripts/package-all.sh
+./apps/twitch/scripts/install-native.sh --browser chrome --toolchain-mode Shared
+./apps/youtube/scripts/install-native.sh --browser chrome --toolchain-mode Shared
+./apps/twitch/scripts/update-tools.sh --toolchain-mode Shared
+./apps/youtube/scripts/update-tools.sh --toolchain-mode Shared
+```
+
+The macOS shared toolchain is stored under `~/Library/Application Support/com.dowen.local_exporter/toolchain`. The native host registers manifests under the selected Chromium browser's `~/Library/Application Support/<Browser>/NativeMessagingHosts` directory. Apple Silicon and Intel Macs are supported; the updater selects the matching Deno and TwitchDownloaderCLI assets. FFmpeg and Whisper use working PATH tools or Homebrew (`brew install ffmpeg whisper-cpp`) when needed.
+
+Common tools and models are stored once. Product-specific tools live below `products\twitch` or `products\youtube` on Windows, and `products/twitch` or `products/youtube` on macOS. Use `-ToolchainMode Isolated` on Windows or `--toolchain-mode Isolated` on macOS to retain the legacy app-specific layout. Existing files are reused; pass `-ForceUpdate` on Windows or `--force-update` on macOS when a redownload is intentional.
+
+The tool updaters also probe working CLI commands already available on `PATH` (`yt-dlp`, Deno, FFmpeg/FFprobe, Whisper, and TwitchDownloaderCLI). A successful version/help probe lets the native host use that external executable without downloading a duplicate; the platform's force-update option overrides this reuse and installs bundled copies.
 
 For NVIDIA CUDA Whisper transcription in both extensions, use the default auto-detected mode (or force it explicitly):
 
@@ -64,7 +76,7 @@ For NVIDIA CUDA Whisper transcription in both extensions, use the default auto-d
 .\scripts\clean-install.ps1 -WhisperAcceleration Auto
 ```
 
-The native host prefers `toolchain\cuda\whisper-cli.exe` when `nvidia-smi` is available and retries with the CPU Whisper binary if CUDA startup fails. The existing Twitch VOD-summary faster-whisper workflow remains available separately.
+On Windows, the native host prefers `toolchain\cuda\whisper-cli.exe` when `nvidia-smi` is available and retries with the CPU Whisper binary if CUDA startup fails. macOS uses the CPU/Metal-capable Whisper build and does not require CUDA. The existing Twitch VOD-summary faster-whisper workflow remains available separately.
 
 For a complete clean reinstall after loading the new unpacked extensions, no IDs or browser parameter are needed. The script detects the Windows HTTPS default browser, reinstalls both native hosts, and updates the shared toolchain:
 
@@ -75,6 +87,14 @@ For a complete clean reinstall after loading the new unpacked extensions, no IDs
 Use `-Browser all` to register every supported browser, or specify `chrome`, `edge`, `chromium`, or `vivaldi` explicitly.
 Use `-SkipUpdateTools` when you only need to repair native-host registration without downloading or checking the toolchain. Use `-WhisperModel tiny|base|small|medium|large` to choose the model downloaded during a complete clean install.
 
+On macOS, the equivalent flow is:
+
+```bash
+./scripts/clean-install.sh --browser all
+```
+
+Use `--skip-update-tools`, `--force-update`, and `--purge-shared-toolchain` for the corresponding macOS options.
+
 ## Development
 
 ```powershell
@@ -82,7 +102,7 @@ Use `-SkipUpdateTools` when you only need to repair native-host registration wit
 .\scripts\package-all.ps1
 ```
 
-The GitHub Actions workflows validate both apps independently, package extension and Windows release artifacts, publish per-product GitHub Releases, and deploy `docs\` to GitHub Pages.
+The GitHub Actions workflows validate both apps on Windows and macOS, package platform-specific release artifacts, publish per-product GitHub Releases, and deploy `docs\` to GitHub Pages.
 
 ## Repository layout
 
@@ -96,6 +116,6 @@ scripts\           Monorepo-wide test, package, and clean-install entry points
 
 ## Privacy
 
-The extensions store preferences in `chrome.storage.sync`. Export jobs run through local Windows native hosts, write to the user's selected local output folder, and do not send generated media to a developer service. See the [privacy policy](docs/privacy.html) for the product-specific boundaries.
+The extensions store preferences in `chrome.storage.sync`. Export jobs run through a local native host, write to the user's selected local output folder, and do not send generated media to a developer service. See the [privacy policy](docs/privacy.html) for the product-specific boundaries.
 
 Use these tools only for content you own or are authorized to export.

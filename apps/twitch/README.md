@@ -8,7 +8,7 @@
 
 Turn the current Twitch VOD tab into a local export pipeline.
 
-Twitch Local Exporter is a Windows-first Chromium extension that exports video, audio, captions, and VOD chat from the current Twitch VOD page to local files. It runs `yt-dlp`, FFmpeg, optional Whisper transcription, and TwitchDownloaderCLI through a local native host, so you do not have to copy URLs or remember one-off terminal commands.
+Twitch Local Exporter is a Windows and macOS Chromium extension that exports video, audio, captions, and VOD chat from the current Twitch VOD page to local files. It runs `yt-dlp`, FFmpeg, optional Whisper transcription, and TwitchDownloaderCLI through a local native host, so you do not have to copy URLs or remember one-off terminal commands.
 
 No cloud transcription. No analytics. Generated media and chat logs stay on your machine.
 
@@ -31,7 +31,7 @@ The extension prepares local files only; it does not upload the VOD or transcrip
 
 ## Quick Start
 
-1. Download `twitch-local-exporter-vX.Y.Z-windows.zip` from Releases.
+1. Download the platform bundle from Releases: `...-windows.zip` on Windows or `...-macos-arm64.zip` / `...-macos-x64.zip` on macOS.
 2. Extract the ZIP.
 3. Open `chrome://extensions`, `edge://extensions`, or your Chromium browser's extensions page.
 4. Enable `Developer mode`.
@@ -46,6 +46,15 @@ The extension prepares local files only; it does not upload the VOD or transcrip
 ```
 
 Use `-Browser edge`, `-Browser chromium`, `-Browser vivaldi`, or omit `-Browser` to register all supported browser registry paths.
+
+On macOS, run the shell installer from the extracted release bundle instead:
+
+```bash
+./scripts/install-native.sh --extension-id <extension-id> --browser chrome
+./scripts/update-tools.sh
+```
+
+Use `--browser edge`, `--browser chromium`, `--browser vivaldi`, or `--browser all`. The installer registers native messaging manifests under `~/Library/Application Support`.
 
 Open a Twitch VOD page like `https://www.twitch.tv/videos/<vod-id>`, click the extension icon, choose `Video`, `Audio`, `Subtitles`, or `Chat`, pick an output folder, then start the export.
 
@@ -66,26 +75,27 @@ Open a Twitch VOD page like `https://www.twitch.tv/videos/<vod-id>`, click the e
 
 ## Technical Architecture
 
-![Architecture diagram showing the browser extension handing a Twitch VOD export request to a local Windows native host, which runs yt-dlp, TwitchDownloaderCLI, FFmpeg, and Whisper locally before writing media, subtitles, and chat logs to disk](docs/assets/how-it-works.png)
+![Architecture diagram showing the browser extension handing a Twitch VOD export request to a local native host, which runs yt-dlp, TwitchDownloaderCLI, FFmpeg, and Whisper locally before writing media, subtitles, and chat logs to disk](docs/assets/how-it-works.png)
 
-The flow is: **Twitch VOD tab → extension popup → Windows native host → local tools → selected output folder**. The Manifest V3 extension reads the active Twitch tab only when you open the popup; it sends the export request to a Windows native messaging host, which runs the local toolchain and writes generated files to your selected output folder.
+The flow is: **Twitch VOD tab → extension popup → local native host → local tools → selected output folder**. The Manifest V3 extension reads the active Twitch tab only when you open the popup; it sends the export request to a native messaging host, which runs the local toolchain and writes generated files to your selected output folder.
 
 `TwitchDownloaderCLI` is used for chat export because its `chatdownload` mode supports VOD chat output as JSON, HTML, or text. Media and Whisper subtitle fallback use `yt-dlp`, FFmpeg, and whisper.cpp. Chinese subtitle conversion uses OpenCC `s2twp` after the subtitle file is produced, leaving VOD chat text unchanged.
 
 ## Release Downloads
 
-- `twitch-local-exporter-vX.Y.Z-windows.zip`: complete Windows sideload bundle. Start here.
+- `twitch-local-exporter-vX.Y.Z-windows.zip`: complete Windows sideload bundle.
+- `twitch-local-exporter-vX.Y.Z-macos-arm64.zip` / `twitch-local-exporter-vX.Y.Z-macos-x64.zip`: complete macOS sideload bundles.
 - `twitch-local-exporter-extension-vX.Y.Z.zip`: extension-only runtime package for inspection or custom installation.
-- `twitch-local-exporter-host-vX.Y.Z-windows-x64.exe`: standalone native host executable included in the Windows bundle.
+- `twitch-local-exporter-host-vX.Y.Z-windows-x64.exe` and the matching macOS host asset: optional standalone native host executables.
 - `SHA256SUMS.txt`: checksums for release downloads.
 
 ## Requirements
 
-- Windows 10 or 11.
+- Windows 10 or 11, or macOS with an Intel or Apple Silicon processor.
 - Chrome, Edge, Chromium, or Vivaldi.
-- PowerShell.
+- PowerShell on Windows, or a shell and Python 3.11+ on macOS.
 - Python 3.11 or newer if you install from source without the release-built native host executable.
-- `opencc-python-reimplemented`, installed automatically by `install-native.ps1` for source-based Python host installs.
+- `opencc-python-reimplemented`, installed automatically by the native installer for source-based Python host installs.
 
 Subtitle export automatically prefers the NVIDIA CUDA/cuBLAS whisper.cpp binary when the toolchain was updated on a machine with `nvidia-smi`. If CUDA startup fails, the native host retries the same transcription with the CPU binary:
 
@@ -113,7 +123,7 @@ $GpuPython = Join-Path $env:LOCALAPPDATA "com.dowen.local_exporter\\toolchain\\r
 
 The original whisper.cpp CPU backend remains available with the default options.
 
-`update-tools.ps1` can install common helper tools into the shared `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain` directory:
+`update-tools.ps1` on Windows and `update-tools.sh` on macOS install common helper tools into the platform's shared toolchain directory:
 
 - `yt-dlp`
 - TwitchDownloaderCLI
@@ -162,6 +172,16 @@ The source installer creates a `.cmd` launcher that runs the Python native host.
 ```
 
 When `native-host\dist\twitch-local-exporter-host.exe` exists, the installer copies and registers that executable.
+
+On macOS, use the equivalent shell flow:
+
+```bash
+./scripts/package.sh
+./scripts/install-native.sh --browser chrome
+./scripts/update-tools.sh
+```
+
+If you build the standalone host first, run `./scripts/build-native.sh`; the installer will use `native-host/dist/twitch-local-exporter-host` when it is present. Without it, the installer creates an executable Python launcher and installs the Twitch subtitle conversion dependency locally.
 
 ## Privacy And Permissions
 
@@ -212,7 +232,7 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-The workflow validates the extension, builds the Windows native host executable, packages release downloads, writes checksums, and publishes a GitHub Release with notes from [CHANGELOG.md](CHANGELOG.md).
+The workflow validates the extension, builds Windows and macOS native hosts, packages platform-specific release downloads, writes checksums, and publishes a GitHub Release with notes from [CHANGELOG.md](CHANGELOG.md).
 
 ## Scope
 

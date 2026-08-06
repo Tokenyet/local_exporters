@@ -57,7 +57,7 @@ def _opencc_converter(config: str) -> Any:
             raise
         raise RuntimeError(
             "Chinese subtitle conversion requires opencc-python-reimplemented. "
-            "Run scripts/install-native.ps1 again, or install it with "
+            "Run the native host installer again, or install it with "
             "python -m pip install opencc-python-reimplemented."
         ) from error
 

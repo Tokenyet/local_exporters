@@ -266,7 +266,7 @@ async function chooseOutputFolder() {
   const previousText = button.textContent;
   button.disabled = true;
   button.textContent = getMessage("openingFolderPicker", "Opening...");
-  setNotice(getMessage("openingFolderPickerDetail", "Choose an output folder in the Windows dialog."));
+  setNotice(getMessage("openingFolderPickerDetail", "Choose an output folder in the system dialog."));
   try {
     const response = await sendNativeMessage({
       action: "chooseOutputFolder",

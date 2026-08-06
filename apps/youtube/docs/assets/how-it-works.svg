@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
   <title id="title">YouTube Local Exporter local processing architecture</title>
-  <desc id="desc">A browser extension sends an authorized YouTube export request to a Windows native messaging host. Local tools download, remux, extract audio, and transcribe subtitles. Output files stay in a local folder.</desc>
+  <desc id="desc">A browser extension sends an authorized YouTube export request to a local native messaging host. Local tools download, remux, extract audio, and transcribe subtitles. Output files stay in a local folder.</desc>
   <defs>
     <linearGradient id="header" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#0f766e"/>
@@ -51,7 +51,7 @@
 
   <rect x="60" y="48" width="1160" height="112" rx="28" fill="url(#header)"/>
   <text x="96" y="96" class="hero-title">Export YouTube media without sending the job to a cloud service</text>
-  <text x="96" y="130" class="hero-subtitle">Browser UI for control. Windows native host for local downloads, conversion, and subtitles. Files stay on disk.</text>
+  <text x="96" y="130" class="hero-subtitle">Browser UI for control. A local native host handles downloads, conversion, and subtitles. Files stay on disk.</text>
 
   <rect x="70" y="210" width="300" height="330" rx="22" class="card"/>
   <rect x="110" y="250" width="84" height="58" rx="14" class="blue-fill"/>
@@ -76,7 +76,7 @@
   <path class="icon-teal" d="M556 292h52M566 262h32M566 276h32"/>
   <path class="icon-teal" d="M540 316h84"/>
   <text x="540" y="350" class="section-title">Native Host</text>
-  <text x="540" y="384" class="body">A local Windows process receives</text>
+  <text x="540" y="384" class="body">A local process receives</text>
   <text x="540" y="407" class="body">requests from the extension.</text>
   <rect x="540" y="436" width="144" height="30" rx="15" class="chip-fill"/>
   <text x="558" y="456" class="chip">local process</text>

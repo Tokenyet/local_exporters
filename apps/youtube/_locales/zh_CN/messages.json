@@ -20,7 +20,7 @@
   "outputDir": { "message": "输出文件夹" },
   "chooseFolder": { "message": "选择..." },
   "openingFolderPicker": { "message": "打开中..." },
-  "openingFolderPickerDetail": { "message": "请在 Windows 窗口中选择输出文件夹。" },
+  "openingFolderPickerDetail": { "message": "请在系统窗口中选择输出文件夹。" },
   "folderPickerCancelled": { "message": "已取消选择文件夹。" },
   "askOutputDirOnExport": { "message": "每次导出前询问" },
   "useBrowserCookies": { "message": "使用浏览器 cookies" },

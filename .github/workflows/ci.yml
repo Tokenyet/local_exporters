@@ -74,3 +74,67 @@ jobs:
             apps/${{ matrix.product }}/dist/release/${{ matrix.product }}-local-exporter-extension-v*.zip
             apps/${{ matrix.product }}/dist/release/SHA256SUMS.txt
             apps/${{ matrix.product }}/dist/release/release-manifest.json
+
+  validate-macos:
+    name: Validate ${{ matrix.product }} on macOS
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        product: [twitch, youtube]
+
+    defaults:
+      run:
+        working-directory: apps/${{ matrix.product }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check shell and JavaScript syntax
+        shell: bash
+        run: |
+          bash -n scripts/*.sh
+          node --check src/background.js
+          node --check src/content.js
+          node --check popup/popup.js
+          node --check options/options.js
+
+      - name: Run extension smoke tests
+        shell: bash
+        run: node scripts/smoke-test.mjs
+
+      - name: Run native host unit tests
+        shell: bash
+        run: python -m unittest discover -s native-host/tests -p 'test*.py'
+
+      - name: Package extension runtime
+        shell: bash
+        run: bash ./scripts/package.sh
+
+      - name: Build native host
+        shell: bash
+        run: bash ./scripts/build-native.sh
+
+      - name: Package macOS release dry run
+        shell: bash
+        run: bash ./scripts/package-release.sh
+
+      - name: Upload macOS release dry-run assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.product }}-macos-release-dry-run
+          path: |
+            apps/${{ matrix.product }}/dist/release/*macos-*
+            apps/${{ matrix.product }}/dist/release/SHA256SUMS-macos-*.txt
+            apps/${{ matrix.product }}/dist/release/release-manifest-macos-*.json

@@ -20,7 +20,7 @@
   "outputDir": { "message": "出力フォルダー" },
   "chooseFolder": { "message": "選択..." },
   "openingFolderPicker": { "message": "開いています..." },
-  "openingFolderPickerDetail": { "message": "Windows ダイアログで出力フォルダーを選択してください。" },
+  "openingFolderPickerDetail": { "message": "システムダイアログで出力フォルダーを選択してください。" },
   "folderPickerCancelled": { "message": "フォルダー選択をキャンセルしました。" },
   "askOutputDirOnExport": { "message": "出力前に毎回確認" },
   "useBrowserCookies": { "message": "ブラウザー cookies を使用" },

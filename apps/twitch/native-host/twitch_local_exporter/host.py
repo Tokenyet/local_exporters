@@ -74,7 +74,13 @@ class NativeHost:
         target = path.parent if path.is_file() else path
         if not target.exists() and path.parent.exists():
             target = path.parent
-        subprocess.Popen(["explorer.exe", str(target)])
+        if sys.platform == "win32":
+            command = ["explorer.exe", str(target)]
+        elif sys.platform == "darwin":
+            command = ["open", str(target)]
+        else:
+            command = ["xdg-open", str(target)]
+        subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return {"opened": True, "path": str(target)}
 
     def send_response(self, payload: dict[str, Any], *, ok: bool = True, error: str = "") -> None:

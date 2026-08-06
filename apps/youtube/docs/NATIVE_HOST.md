@@ -22,22 +22,26 @@ Responses echo `id` for direct requests. Job updates are pushed as standalone me
 Bundled tools are preferred from:
 
 ```text
-Shared mode: `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain`
+Windows shared mode: `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain`
 
-Isolated mode: `%LOCALAPPDATA%\YouTubeLocalExporter\tools`
+macOS shared mode: `~/Library/Application Support/com.dowen.local_exporter/toolchain`
+
+Windows isolated mode: `%LOCALAPPDATA%\YouTubeLocalExporter\tools`
+
+macOS isolated mode: `~/Library/Application Support/YouTubeLocalExporter/tools`
 ```
 
 The host falls back to PATH for development when a bundled executable is missing.
 
 Required tools:
 
-- `yt-dlp.exe`
-- `deno.exe` or another supported JavaScript runtime on PATH (`node`, `quickjs`, or `bun`)
-- `ffmpeg.exe`
-- `ffprobe.exe`
-- `whisper-cli.exe`
-- `models\ggml-small.bin` by default
-- optional `cuda\whisper-cli.exe` for NVIDIA CUDA; selected automatically when `nvidia-smi` is available, with CPU retry on CUDA startup failure
+- `yt-dlp`/`yt-dlp.exe`
+- Deno or another supported JavaScript runtime on PATH (`node`, `quickjs`, or `bun`)
+- `ffmpeg`/`ffmpeg.exe`
+- `ffprobe`/`ffprobe.exe`
+- `whisper-cli`/`whisper-cli.exe`
+- `models/ggml-small.bin` by default
+- optional Windows `cuda\whisper-cli.exe` for NVIDIA CUDA; selected automatically when `nvidia-smi` is available, with CPU retry on CUDA startup failure
 
 ## Output Naming
 
@@ -47,4 +51,4 @@ Files use:
 YYYY-MM-DD - title [videoId].ext
 ```
 
-Invalid Windows filename characters and `%` are replaced with `_`.
+Invalid filename characters and `%` are replaced with `_`.

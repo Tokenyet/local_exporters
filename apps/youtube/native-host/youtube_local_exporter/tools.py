@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -31,18 +32,27 @@ class Tool:
 
 
 def resolve_tool(executable: str) -> Tool:
-    candidates = [product_tools_dir() / executable, tools_dir() / executable]
+    names = executable_names(executable)
+    candidates = [directory / name for directory in (product_tools_dir(), tools_dir()) for name in names]
     if executable == "whisper-cuda-cli.exe":
-        candidates.insert(0, tools_dir() / "cuda" / "whisper-cli.exe")
+        candidates = [tools_dir() / "cuda" / name for name in executable_names("whisper-cli.exe")] + candidates
     for bundled in candidates:
         if bundled.exists():
             return Tool(executable.removesuffix(".exe"), executable, bundled, "bundled")
 
-    found = shutil.which(executable)
-    if found:
-        return Tool(executable.removesuffix(".exe"), executable, Path(found), "path")
+    for name in names:
+        found = shutil.which(name)
+        if found:
+            return Tool(executable.removesuffix(".exe"), executable, Path(found), "path")
 
     return Tool(executable.removesuffix(".exe"), executable, None, "missing")
+
+
+def executable_names(executable: str) -> list[str]:
+    normalized = executable.removesuffix(".exe")
+    if sys.platform == "win32":
+        return [executable if executable.endswith(".exe") else f"{executable}.exe", normalized]
+    return [normalized, executable]
 
 
 def resolve_model(name: str = "small") -> Path | None:
@@ -86,7 +96,7 @@ def yt_dlp_js_runtime_args() -> list[str]:
 
 
 def cuda_available() -> bool:
-    return shutil.which("nvidia-smi.exe") is not None or shutil.which("nvidia-smi") is not None
+    return any(shutil.which(name) for name in executable_names("nvidia-smi.exe"))
 
 
 def whisper_cli_supports_cuda(path: Path | None) -> bool:
