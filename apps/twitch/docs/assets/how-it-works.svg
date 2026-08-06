@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
   <title id="title">Twitch Local Exporter technical architecture</title>
-  <desc id="desc">A Twitch VOD page starts an export in a browser extension. A local Windows native host uses local tools to download media, create subtitles, and export chat. Files are written only to the selected local folder.</desc>
+  <desc id="desc">A Twitch VOD page starts an export in a browser extension. A local native host uses local tools to download media, create subtitles, and export chat. Files are written only to the selected local folder.</desc>
   <defs>
     <linearGradient id="header" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#0f766e"/>
@@ -43,7 +43,7 @@
 
   <rect x="56" y="40" width="1168" height="132" rx="26" fill="url(#header)"/>
   <text x="92" y="94" class="header-title">Twitch VOD export, processed locally</text>
-  <text x="92" y="126" class="header-subtitle">The browser starts the job; Windows performs download, conversion, transcription, and chat export on your machine.</text>
+  <text x="92" y="126" class="header-subtitle">The browser starts the job; your computer performs download, conversion, transcription, and chat export locally.</text>
   <rect x="92" y="141" width="132" height="22" rx="11" fill="#dff7ef"/>
   <text x="108" y="157" class="chip chip-teal-text">NO CLOUD UPLOAD</text>
   <rect x="238" y="141" width="162" height="22" rx="11" fill="#dbeafe"/>
@@ -51,7 +51,7 @@
 
   <rect x="620" y="204" width="600" height="322" rx="24" class="boundary"/>
   <rect x="648" y="220" width="212" height="24" rx="12" class="chip-teal"/>
-  <text x="664" y="237" class="boundary-label">LOCAL WINDOWS BOUNDARY</text>
+  <text x="664" y="237" class="boundary-label">LOCAL HOST BOUNDARY</text>
 
   <rect x="60" y="258" width="250" height="246" rx="20" class="stage"/>
   <circle cx="92" cy="292" r="17" fill="#2563eb"/>
@@ -76,7 +76,7 @@
   <rect x="650" y="258" width="250" height="246" rx="20" class="stage"/>
   <circle cx="682" cy="292" r="17" fill="#0f766e"/>
   <text x="677" y="298" class="number">3</text>
-  <text x="710" y="288" class="overline">WINDOWS</text>
+  <text x="710" y="288" class="overline">LOCAL HOST</text>
   <text x="678" y="337" class="stage-title">Native host</text>
   <text x="678" y="371" class="stage-body">Native messaging receives the job</text>
   <text x="678" y="393" class="stage-body">and returns status to the popup.</text>

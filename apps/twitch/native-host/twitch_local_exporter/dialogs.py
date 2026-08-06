@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import subprocess
+import sys
 from pathlib import Path
 
 from .config import default_output_dir
@@ -8,6 +10,11 @@ from .config import default_output_dir
 
 def choose_output_folder(initial_dir: str | None = None) -> str:
     initial_path = normalize_initial_dir(initial_dir)
+    if sys.platform == "darwin":
+        try:
+            return choose_with_macos(initial_path)
+        except Exception:
+            return choose_with_tkinter(initial_path)
     try:
         return choose_with_powershell(initial_path)
     except Exception:
@@ -41,6 +48,27 @@ def choose_with_tkinter(initial_dir: Path) -> str:
     finally:
         root.destroy()
     return str(selected or "")
+
+
+def choose_with_macos(initial_dir: Path) -> str:
+    escaped = json.dumps(str(initial_dir))
+    script = (
+        'set chosenFolder to choose folder with prompt "Choose an output folder for Twitch Local Exporter." '
+        f"default location POSIX file {escaped}\n"
+        "POSIX path of chosenFolder"
+    )
+    result = subprocess.run(
+        ["osascript", "-e", script],
+        capture_output=True,
+        text=True,
+        timeout=300,
+        check=False
+    )
+    if result.returncode != 0:
+        if "User canceled" in (result.stderr or ""):
+            return ""
+        raise RuntimeError((result.stderr or result.stdout or "Folder picker failed").strip())
+    return result.stdout.strip()
 
 
 def choose_with_powershell(initial_dir: Path) -> str:

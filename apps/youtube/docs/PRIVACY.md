@@ -4,6 +4,6 @@ YouTube Local Exporter stores extension preferences in `chrome.storage.sync`, in
 
 Media export jobs are processed locally by the native host. The extension does not collect analytics, send generated media to a remote service, or use cloud transcription.
 
-The native host writes exported files to the selected local output folder and stores common helper tools under `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain`.
+The native host writes exported files to the selected local output folder and stores common helper tools under `%LOCALAPPDATA%\com.dowen.local_exporter\toolchain` on Windows or `~/Library/Application Support/com.dowen.local_exporter/toolchain` on macOS.
 
 Use this tool only for videos you own or are authorized to export.

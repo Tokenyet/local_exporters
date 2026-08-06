@@ -25,22 +25,28 @@
     </header>
     <main>
       <h2>Clean reinstall</h2>
-      <p>The manifests include stable public signing keys. Run <code>scripts\show-extension-ids.ps1</code> to inspect the fixed IDs if needed, then build the unpacked extensions, remove old native registrations, and register both native hosts in the Windows HTTPS default browser without passing IDs manually:</p>
+      <p>On Windows, the manifests include stable public signing keys. Run <code>scripts\show-extension-ids.ps1</code> to inspect the fixed IDs if needed, then build the unpacked extensions, remove old native registrations, and register both native hosts without passing IDs manually:</p>
       <pre><code>.\scripts\package-all.ps1
 .\scripts\clean-install.ps1</code></pre>
       <p>Use <code>-Browser all</code> when every supported browser should receive the native host registration.</p>
+
+      <h2>macOS clean reinstall</h2>
+      <p>Use the shell entry points on macOS. They derive the stable IDs from each manifest and register native messaging manifests under the selected Chromium browser's Application Support directory:</p>
+      <pre><code>./scripts/show-extension-ids.sh
+./scripts/package-all.sh
+./scripts/clean-install.sh --browser chrome</code></pre>
 
       <h2>Vivaldi on Windows</h2>
       <p>Vivaldi uses Chromium's Chrome native-messaging registry root on Windows. The native host must therefore be registered under <code>HKCU\Software\Google\Chrome\NativeMessagingHosts</code>, not only under <code>HKCU\Software\Vivaldi\NativeMessagingHosts</code>. If the popup says the host is not connected after a clean install, restart Vivaldi and reload both unpacked extensions from <code>vivaldi://extensions</code>.</p>
 
       <h2>Shared tools</h2>
-      <p><code>.\scripts\clean-install.ps1</code> now runs both shared-toolchain updaters by default, so a complete reinstall includes native hosts and tools. The updaters first probe working CLI commands on <code>PATH</code> and avoid downloading duplicates; use <code>-ForceUpdate</code> to install bundled copies anyway. Use <code>-SkipUpdateTools</code> when you only need to repair host registration. The second updater reuses common files from <code>%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code>.</p>
+      <p><code>.\scripts\clean-install.ps1</code> on Windows and <code>./scripts/clean-install.sh</code> on macOS run both shared-toolchain updaters by default. The updaters first probe working CLI commands on <code>PATH</code> and avoid downloading duplicates; use the platform's force-update option when you explicitly want bundled copies. The macOS shared toolchain is under <code>~/Library/Application Support/com.dowen.local_exporter/toolchain</code>.</p>
 
       <h2>Native host diagnostics</h2>
       <p>Check the extension's native host status from its popup or run the product's native-host tests. The status includes the resolved toolchain mode and root. If an extension was reloaded from a new folder, reinstall the native host with the new extension ID.</p>
 
       <h2>Report a problem</h2>
-      <p>Open an issue with the product name, Windows version, browser, extension version, and the smallest relevant error message. Do not attach cookies, access tokens, or private media URLs.</p>
+      <p>Open an issue with the product name, OS version, browser, extension version, and the smallest relevant error message. Do not attach cookies, access tokens, or private media URLs.</p>
     </main>
     <footer><a href="./">Home</a> · <a href="privacy.html">Privacy</a> · <a href="https://github.com/Tokenyet/local_exporters/issues">GitHub Issues</a></footer>
   </div>

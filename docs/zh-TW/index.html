@@ -13,7 +13,7 @@
   <link rel="alternate" hreflang="x-default" href="https://www.dowen.idv.tw/local_exporters/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Local Exporters · 補上你錯過的直播內容">
-  <meta property="og:description" content="在 Windows 電腦上以 Whisper 與本機工具，為 Twitch 與 YouTube 直播建立可閱讀、整理與摘要的逐字稿。">
+  <meta property="og:description" content="在 Windows 或 macOS 電腦上以 Whisper 與本機工具，為 Twitch 與 YouTube 直播建立可閱讀、整理與摘要的逐字稿。">
   <meta property="og:url" content="https://www.dowen.idv.tw/local_exporters/zh-TW/">
   <meta property="og:locale" content="zh_TW">
   <link rel="stylesheet" href="../styles.css">
@@ -24,7 +24,7 @@
     "@type": "SoftwareApplication",
     "name": "Local Exporters",
     "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Windows",
+    "operatingSystem": "Windows, macOS",
     "description": "將已獲授權的 Twitch 與 YouTube 媒體、字幕及聊天室匯出為本機檔案，方便閱讀與摘要的 Chromium 擴充功能。",
     "url": "https://www.dowen.idv.tw/local_exporters/zh-TW/",
     "codeRepository": "https://github.com/Tokenyet/local_exporters",
@@ -60,7 +60,7 @@
     <main id="main">
       <section class="hero">
         <div class="hero-copy">
-          <div class="status-pill"><span></span> 開放原始碼 · Windows · 本機處理</div>
+          <div class="status-pill"><span></span> 開放原始碼 · Windows + macOS · 本機處理</div>
           <p class="kicker">為值得補看的直播而做</p>
           <h1>補上你錯過的直播內容。</h1>
           <p class="hero-lead">將字幕、媒體與 Twitch 聊天室匯出成為本機檔案。直播沒有可用逐字稿時，可以用 Whisper 建立字幕，再自行閱讀、整理大綱，或交給你選擇的 AI 摘要工具。</p>
@@ -156,7 +156,7 @@
           <div class="product-copy">
             <div class="product-name"><span class="product-number">01</span><span>Twitch Local Exporter</span></div>
             <h3>把 VOD 媒體、字幕與聊天室放在一起。</h3>
-            <p>在彈出視窗選擇影片、音訊、字幕或聊天室。Windows native host 處理工作時，仍可看到進度並隨時取消。</p>
+            <p>在彈出視窗選擇影片、音訊、字幕或聊天室。本機 native host 處理工作時，仍可看到進度並隨時取消。</p>
             <div class="output-chips"><span>MP4</span><span>音訊</span><span>SRT / VTT</span><span>聊天室 JSON / HTML / TXT</span></div>
             <a class="text-link" href="https://github.com/Tokenyet/local_exporters/tree/main/apps/twitch">Twitch 原始碼與安裝說明 <span>→</span></a>
           </div>
@@ -189,7 +189,7 @@
         <div class="section-heading split-heading">
           <div>
             <p class="kicker">技術概念</p>
-            <h2>瀏覽器提出要求，Windows 負責實際工作。</h2>
+            <h2>瀏覽器提出要求，電腦負責實際工作。</h2>
           </div>
           <p>擴充功能本身刻意保持精簡。下載、封裝、轉錄、聊天室匯出、進度與取消，都交由本機 native messaging host 處理。</p>
         </div>
@@ -199,7 +199,7 @@
           <span class="flow-arrow" aria-hidden="true">→</span>
           <div class="flow-step"><span class="flow-number">2</span><strong>擴充功能彈出視窗</strong><small>由使用者明確開始匯出</small></div>
           <span class="flow-arrow" aria-hidden="true">→</span>
-          <div class="flow-step flow-local"><span class="flow-number">3</span><strong>Windows native host</strong><small>工作、狀態、進度與取消</small></div>
+          <div class="flow-step flow-local"><span class="flow-number">3</span><strong>本機 native host</strong><small>工作、狀態、進度與取消</small></div>
           <span class="flow-arrow" aria-hidden="true">→</span>
           <div class="flow-step flow-tools"><span class="flow-number">4</span><strong>本機工具鏈</strong><small>yt-dlp · FFmpeg · Whisper · Deno</small></div>
           <span class="flow-arrow" aria-hidden="true">→</span>
@@ -227,11 +227,11 @@
         <div class="architecture-gallery">
           <details class="architecture-card">
             <summary><span><strong>Twitch 架構</strong><small>包含字幕與 VOD 聊天室匯出</small></span><span class="summary-action">查看圖解</span></summary>
-            <img src="../assets/twitch-how-it-works.png" width="1280" height="720" alt="Twitch Local Exporter 從瀏覽器擴充功能、Windows native host 到本機工具的詳細架構圖" loading="lazy">
+            <img src="../assets/twitch-how-it-works.png" width="1280" height="720" alt="Twitch Local Exporter 從瀏覽器擴充功能、本機 native host 到本機工具的詳細架構圖" loading="lazy">
           </details>
           <details class="architecture-card">
             <summary><span><strong>YouTube 架構</strong><small>媒體與轉錄流程都留在本機電腦</small></span><span class="summary-action">查看圖解</span></summary>
-            <img src="../assets/youtube-how-it-works.png" width="1680" height="941" alt="YouTube Local Exporter 從瀏覽器擴充功能到 Windows 本機工具與輸出檔案的詳細架構圖" loading="lazy">
+            <img src="../assets/youtube-how-it-works.png" width="1680" height="941" alt="YouTube Local Exporter 從瀏覽器擴充功能到本機工具與輸出檔案的詳細架構圖" loading="lazy">
           </details>
         </div>
       </section>
@@ -241,7 +241,7 @@
           <p class="kicker">共用工具鏈</p>
           <h2>共用工具只下載一次，產品行為仍各自獨立。</h2>
           <p>兩個擴充功能可以共用 yt-dlp、Deno、FFmpeg、Whisper.cpp 與模型檔案，同時保留獨立的 manifest、權限、native host 與產品專用工具。</p>
-          <code class="path-block">%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code>
+          <code class="path-block">Windows：%LOCALAPPDATA%\com.dowen.local_exporter\toolchain<br>macOS：~/Library/Application Support/com.dowen.local_exporter/toolchain</code>
         </div>
         <div class="tool-stack" aria-label="共用本機工具">
           <div><span>01</span><strong>yt-dlp</strong><small>取得媒體</small></div>

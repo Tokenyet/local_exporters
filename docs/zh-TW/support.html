@@ -25,22 +25,28 @@
     </header>
     <main>
       <h2>完整重新安裝</h2>
-      <p>Manifest 已包含固定的公開簽章金鑰。如有需要，可執行 <code>scripts\show-extension-ids.ps1</code> 查看固定 ID，再建立 unpacked extension、移除舊的 native host 登錄，並在 Windows 預設 HTTPS 瀏覽器中重新登錄兩個 native host：</p>
+      <p>在 Windows 上，Manifest 已包含固定的公開簽章金鑰。如有需要，可執行 <code>scripts\show-extension-ids.ps1</code> 查看固定 ID，再建立 unpacked extension、移除舊的 native host 登錄，並重新登錄兩個 native host：</p>
       <pre><code>.\scripts\package-all.ps1
 .\scripts\clean-install.ps1</code></pre>
       <p>需要在所有支援的瀏覽器中登錄 native host 時，請加上 <code>-Browser all</code>。</p>
+
+      <h2>macOS 完整重新安裝</h2>
+      <p>在 macOS 使用 shell 入口。它會從兩個 Manifest 推導固定 ID，並把 native messaging manifest 登錄到所選 Chromium 瀏覽器的 Application Support 資料夾：</p>
+      <pre><code>./scripts/show-extension-ids.sh
+./scripts/package-all.sh
+./scripts/clean-install.sh --browser chrome</code></pre>
 
       <h2>Windows 上的 Vivaldi</h2>
       <p>Vivaldi 在 Windows 使用 Chromium 的 Chrome native messaging 登錄位置。因此 native host 必須登錄在 <code>HKCU\Software\Google\Chrome\NativeMessagingHosts</code>，不能只放在 <code>HKCU\Software\Vivaldi\NativeMessagingHosts</code>。Clean install 後若彈出視窗仍顯示無法連接 host，請重新啟動 Vivaldi，並從 <code>vivaldi://extensions</code> 重新載入兩個 unpacked extension。</p>
 
       <h2>共用工具</h2>
-      <p><code>.\scripts\clean-install.ps1</code> 預設會執行兩個共用工具鏈更新程式，因此完整重裝會包含 native host 與工具。更新程式會先測試 <code>PATH</code> 中可用的 CLI，避免重複下載；需要強制安裝內附版本時使用 <code>-ForceUpdate</code>。只想修復 native host 登錄而不檢查工具時，使用 <code>-SkipUpdateTools</code>。第二個更新程式會重用 <code>%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code> 中的共用檔案。</p>
+      <p>Windows 使用 <code>.\scripts\clean-install.ps1</code>，macOS 使用 <code>./scripts/clean-install.sh</code>；兩者預設都會執行兩個共用工具鏈更新程式。更新程式會先測試 <code>PATH</code> 中可用的 CLI，避免重複下載；需要強制更新時使用對應平台的 force-update 選項。macOS 共用工具鏈位於 <code>~/Library/Application Support/com.dowen.local_exporter/toolchain</code>。</p>
 
       <h2>Native host 診斷</h2>
       <p>可以從擴充功能彈出視窗查看 native host 狀態，或執行對應產品的 native-host tests。狀態資訊包含實際使用的 toolchain 模式與根目錄。若從新資料夾重新載入擴充功能，請用新的 extension ID 重新安裝 native host。</p>
 
       <h2>回報問題</h2>
-      <p>請在 GitHub Issue 提供產品名稱、Windows 版本、瀏覽器、擴充功能版本，以及最小範圍的相關錯誤訊息。請勿附上 cookies、access token 或私人媒體網址。</p>
+      <p>請在 GitHub Issue 提供產品名稱、作業系統版本、瀏覽器、擴充功能版本，以及最小範圍的相關錯誤訊息。請勿附上 cookies、access token 或私人媒體網址。</p>
     </main>
     <footer><a href="./">首頁</a> · <a href="privacy.html">隱私權</a> · <a href="https://github.com/Tokenyet/local_exporters/issues">GitHub Issues</a></footer>
   </div>

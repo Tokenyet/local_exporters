@@ -21,9 +21,55 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Release product
-    runs-on: windows-latest
+  resolve:
+    name: Resolve product and version
+    runs-on: ubuntu-latest
+    outputs:
+      product: ${{ steps.release.outputs.product }}
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - name: Resolve release inputs
+        id: release
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            product="${{ inputs.product }}"
+            version="${{ inputs.version }}"
+            version="${version#v}"
+            tag="$product-v$version"
+          else
+            tag="$GITHUB_REF_NAME"
+            if [[ "$tag" =~ ^(twitch|youtube)-v(.+)$ ]]; then
+              product="${BASH_REMATCH[1]}"
+              version="${BASH_REMATCH[2]}"
+            else
+              echo "Release tag must be twitch-vX.Y.Z or youtube-vX.Y.Z" >&2
+              exit 1
+            fi
+          fi
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$ ]] || { echo "Invalid version: $version" >&2; exit 1; }
+          echo "product=$product" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build ${{ needs.resolve.outputs.product }} (${{ matrix.platform }})
+    needs: resolve
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            os: windows-latest
+          - platform: macos-x64
+            os: macos-15-intel
+          - platform: macos-arm64
+            os: macos-15
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: apps/${{ needs.resolve.outputs.product }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -38,67 +84,72 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Resolve product and version
-        id: release
-        shell: pwsh
+      - name: Validate extension and native host
+        shell: bash
         run: |
-          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
-            $product = "${{ inputs.product }}"
-            $version = "${{ inputs.version }}".Trim()
-            $tag = "$product-v$($version.TrimStart('v'))"
-          } else {
-            $tag = $env:GITHUB_REF_NAME
-            if ($tag -notmatch '^(twitch|youtube)-v(.+)$') { throw "Release tag must be twitch-vX.Y.Z or youtube-vX.Y.Z" }
-            $product = $Matches[1]
-            $version = $Matches[2]
-          }
-          if (-not ($version -match '^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$')) { throw "Invalid version: $version" }
-          "product=$product" >> $env:GITHUB_OUTPUT
-          "version=$version" >> $env:GITHUB_OUTPUT
-          "tag=$tag" >> $env:GITHUB_OUTPUT
+          node --check src/background.js
+          node --check src/content.js
+          node --check popup/popup.js
+          node --check options/options.js
+          node scripts/smoke-test.mjs
+          python -m unittest discover -s native-host/tests -p 'test*.py'
 
-      - name: Validate product
+      - name: Build Windows native host
+        if: matrix.platform == 'windows'
         shell: pwsh
-        working-directory: apps/${{ steps.release.outputs.product }}
-        run: |
-          node --check src\background.js
-          node --check src\content.js
-          node --check popup\popup.js
-          node --check options\options.js
-          node scripts\smoke-test.mjs
-          python -m unittest discover -s native-host\tests -p "test*.py"
-
-      - name: Install native build tooling
-        shell: pwsh
-        run: |
-          python -m pip install --upgrade pip uv
-          uv --version
-
-      - name: Build native host executable
-        shell: pwsh
-        working-directory: apps/${{ steps.release.outputs.product }}
         run: .\scripts\build-native.ps1
 
-      - name: Package release assets
+      - name: Build macOS native host
+        if: startsWith(matrix.platform, 'macos-')
+        shell: bash
+        run: bash ./scripts/build-native.sh
+
+      - name: Package Windows release
+        if: matrix.platform == 'windows'
         shell: pwsh
-        working-directory: apps/${{ steps.release.outputs.product }}
-        run: .\scripts\package-release.ps1 -Version "${{ steps.release.outputs.version }}"
+        run: .\scripts\package-release.ps1 -Version "${{ needs.resolve.outputs.version }}"
+
+      - name: Package macOS release
+        if: startsWith(matrix.platform, 'macos-')
+        shell: bash
+        run: bash ./scripts/package-release.sh --version "${{ needs.resolve.outputs.version }}"
+
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.resolve.outputs.product }}-${{ matrix.platform }}-release
+          path: |
+            apps/${{ needs.resolve.outputs.product }}/dist/release/*.zip
+            apps/${{ needs.resolve.outputs.product }}/dist/release/*.exe
+            apps/${{ needs.resolve.outputs.product }}/dist/release/*macos-*
+            apps/${{ needs.resolve.outputs.product }}/dist/release/SHA256SUMS*.txt
+            apps/${{ needs.resolve.outputs.product }}/dist/release/release-manifest*.json
+            apps/${{ needs.resolve.outputs.product }}/dist/release/RELEASE_NOTES*.md
+
+  publish:
+    name: Publish ${{ needs.resolve.outputs.product }} release
+    needs: [resolve, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download platform release assets
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ needs.resolve.outputs.product }}-*-release
+          path: release-assets
+          merge-multiple: true
 
       - name: Publish GitHub release
-        shell: pwsh
-        working-directory: apps/${{ steps.release.outputs.product }}
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = "${{ steps.release.outputs.tag }}"
-          $product = "${{ steps.release.outputs.product }}"
-          $title = "$product Local Exporter $tag"
-          $notes = "dist\release\RELEASE_NOTES.md"
-          $assetPaths = @(
-            "dist\release\$product-local-exporter-v${{ steps.release.outputs.version }}-windows.zip",
-            "dist\release\$product-local-exporter-extension-v${{ steps.release.outputs.version }}.zip",
-            "dist\release\$product-local-exporter-host-v${{ steps.release.outputs.version }}-windows-x64.exe",
-            "dist\release\SHA256SUMS.txt",
-            "dist\release\release-manifest.json"
-          ) | Where-Object { Test-Path $_ }
-          gh release create $tag @assetPaths --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --title $title --notes-file $notes --latest
+          mapfile -t assets < <(find release-assets -type f \( -name '*.zip' -o -name '*.exe' -o -name 'SHA256SUMS*.txt' -o -name 'release-manifest*.json' \) -print | sort)
+          notes="$(find release-assets -type f -name 'RELEASE_NOTES.md' -print -quit)"
+          [[ -n "$notes" ]] || notes="$(find release-assets -type f -name 'RELEASE_NOTES*.md' -print -quit)"
+          [[ "${#assets[@]}" -gt 0 ]] || { echo "No release assets were downloaded." >&2; exit 1; }
+          gh release create "${{ needs.resolve.outputs.tag }}" "${assets[@]}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "${{ needs.resolve.outputs.product }} Local Exporter ${{ needs.resolve.outputs.tag }}" \
+            --notes-file "$notes" \
+            --latest

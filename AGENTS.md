@@ -2,10 +2,10 @@
 
 ## Project Structure & Module Organization
 
-This Windows-first monorepo contains two independent Chromium extensions:
+This cross-platform monorepo contains two independent Chromium extensions:
 
-- `apps/twitch/`: Twitch video/audio/subtitle/VOD-chat export extension, Python native host, tool updater, and VOD-summary skill.
-- `apps/youtube/`: YouTube video/audio/subtitle export extension and Python native host.
+- `apps/twitch/`: Twitch video/audio/subtitle/VOD-chat export extension, Python native host, platform-specific tool updaters, and VOD-summary skill.
+- `apps/youtube/`: YouTube video/audio/subtitle export extension, platform-specific tool updater, and Python native host.
 - `scripts/`: Monorepo-wide test, packaging, ID-reporting, and clean-install entry points.
 - `docs/`: GitHub Pages site, support/privacy pages, and store-submission drafts.
 - `.github/workflows/`: CI, product release, and Pages deployment automation.
@@ -14,12 +14,20 @@ Within each app, browser code is in `src/`, `popup/`, and `options/`; localized 
 
 ## Build, Test, and Development Commands
 
-Run from the repository root in PowerShell:
+Run from the repository root in PowerShell on Windows:
 
 ```powershell
 .\scripts\test-all.ps1       # Syntax, smoke, and native-host tests for both apps
 .\scripts\package-all.ps1    # Create each app's ZIP and unpacked extension
 .\scripts\show-extension-ids.ps1
+```
+
+On macOS, use the equivalent shell entry points:
+
+```bash
+./scripts/test-all.sh
+./scripts/package-all.sh
+./scripts/show-extension-ids.sh
 ```
 
 For one product, change to `apps\twitch` or `apps\youtube` and run `node scripts\smoke-test.mjs`, `python -m unittest discover -s native-host\tests -p "test*.py"`, and `.\scripts\package.ps1`. Use the documented native install/update scripts only when validating browser integration.

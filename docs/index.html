@@ -13,7 +13,7 @@
   <link rel="alternate" hreflang="x-default" href="https://www.dowen.idv.tw/local_exporters/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Local Exporters · Catch up on the streams you missed">
-  <meta property="og:description" content="Create local Twitch and YouTube transcripts for review and AI summaries, with Whisper and media processing on your Windows PC.">
+  <meta property="og:description" content="Create local Twitch and YouTube transcripts for review and AI summaries, with Whisper and media processing on Windows or macOS.">
   <meta property="og:url" content="https://www.dowen.idv.tw/local_exporters/">
   <link rel="stylesheet" href="styles.css">
   <script src="language.js"></script>
@@ -23,7 +23,7 @@
     "@type": "SoftwareApplication",
     "name": "Local Exporters",
     "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Windows",
+    "operatingSystem": "Windows, macOS",
     "description": "Chromium extensions for exporting authorized Twitch and YouTube media, subtitles, and chat to local files for review and summarization.",
     "url": "https://www.dowen.idv.tw/local_exporters/",
     "codeRepository": "https://github.com/Tokenyet/local_exporters",
@@ -60,7 +60,7 @@
     <main id="main">
       <section class="hero">
         <div class="hero-copy">
-          <div class="status-pill"><span></span> Open source · Windows · Local processing</div>
+          <div class="status-pill"><span></span> Open source · Windows + macOS · Local processing</div>
           <p class="kicker">For livestreams worth catching up on</p>
           <h1>Catch up on the streams you missed.</h1>
           <p class="hero-lead">Export subtitles, media, and Twitch chat to local files. When a livestream has no usable transcript, Whisper can create one—ready for reading, outlining, or the AI summarizer you choose.</p>
@@ -167,7 +167,7 @@
           <div class="product-copy">
             <div class="product-name"><span class="product-number">01</span><span>Twitch Local Exporter</span></div>
             <h3>VOD media, subtitles, and chat—kept together.</h3>
-            <p>Choose video, audio, subtitles, or chat from the popup. Progress and cancellation stay visible while the Windows native host performs the work.</p>
+            <p>Choose video, audio, subtitles, or chat from the popup. Progress and cancellation stay visible while the local native host performs the work.</p>
             <div class="output-chips">
               <span>MP4</span><span>Audio</span><span>SRT / VTT</span><span>Chat JSON / HTML / TXT</span>
             </div>
@@ -204,7 +204,7 @@
         <div class="section-heading split-heading">
           <div>
             <p class="kicker">Technical concept</p>
-            <h2>The browser asks. Windows does the work.</h2>
+            <h2>The browser asks. Your computer does the work.</h2>
           </div>
           <p>The extension is intentionally thin. Downloading, remuxing, transcription, chat export, progress, and cancellation run through a local native messaging host.</p>
         </div>
@@ -224,7 +224,7 @@
           <span class="flow-arrow" aria-hidden="true">→</span>
           <div class="flow-step flow-local">
             <span class="flow-number">3</span>
-            <strong>Windows native host</strong>
+            <strong>Local native host</strong>
             <small>Jobs, status, progress, cancellation</small>
           </div>
           <span class="flow-arrow" aria-hidden="true">→</span>
@@ -265,14 +265,14 @@
               <span><strong>Twitch architecture</strong><small>Includes subtitles and VOD chat export</small></span>
               <span class="summary-action">View diagram</span>
             </summary>
-            <img src="assets/twitch-how-it-works.png" width="1280" height="720" alt="Detailed Twitch Local Exporter architecture from browser extension to Windows native host and local tools" loading="lazy">
+            <img src="assets/twitch-how-it-works.png" width="1280" height="720" alt="Detailed Twitch Local Exporter architecture from browser extension to local native host and local tools" loading="lazy">
           </details>
           <details class="architecture-card">
             <summary>
               <span><strong>YouTube architecture</strong><small>Media and transcription stay on the local computer</small></span>
               <span class="summary-action">View diagram</span>
             </summary>
-            <img src="assets/youtube-how-it-works.png" width="1680" height="941" alt="Detailed YouTube Local Exporter architecture from browser extension to local Windows tools and output files" loading="lazy">
+            <img src="assets/youtube-how-it-works.png" width="1680" height="941" alt="Detailed YouTube Local Exporter architecture from browser extension to local tools and output files" loading="lazy">
           </details>
         </div>
       </section>
@@ -282,7 +282,7 @@
           <p class="kicker">One shared toolchain</p>
           <h2>Download common tools once. Keep product behavior separate.</h2>
           <p>Both extensions can share yt-dlp, Deno, FFmpeg, Whisper.cpp, and model files while retaining independent manifests, permissions, native hosts, and product-specific tools.</p>
-          <code class="path-block">%LOCALAPPDATA%\com.dowen.local_exporter\toolchain</code>
+          <code class="path-block">Windows: %LOCALAPPDATA%\com.dowen.local_exporter\toolchain<br>macOS: ~/Library/Application Support/com.dowen.local_exporter/toolchain</code>
         </div>
         <div class="tool-stack" aria-label="Shared local tools">
           <div><span>01</span><strong>yt-dlp</strong><small>media retrieval</small></div>

@@ -8,10 +8,17 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from youtube_local_exporter.config import product_tools_dir, toolchain_mode, toolchain_root, tools_dir
+from youtube_local_exporter.config import (
+    product_tools_dir,
+    toolchain_mode,
+    toolchain_root,
+    tools_dir,
+    update_script_command,
+    update_script_path,
+)
 from youtube_local_exporter.jobs import choose_subtitle_from_probe_summary, interpolate_progress, newest_matching_output
 from youtube_local_exporter.cookies import format_cookie_row, normalize_cookies
-from youtube_local_exporter.tools import normalize_model_name, require_tools, whisper_backend, yt_dlp_js_runtime_args
+from youtube_local_exporter.tools import normalize_model_name, require_tools, resolve_tool, whisper_backend, yt_dlp_js_runtime_args
 
 
 class ToolsAndJobsTests(unittest.TestCase):
@@ -49,6 +56,34 @@ class ToolsAndJobsTests(unittest.TestCase):
     def test_require_tools_reports_missing(self):
         with self.assertRaisesRegex(RuntimeError, "definitely-missing-tool.exe"):
             require_tools(["definitely-missing-tool.exe"])
+
+    def test_macos_tool_names_are_resolved_from_unix_bundles(self):
+        previous_localappdata = os.environ.get("LOCALAPPDATA")
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                os.environ["LOCALAPPDATA"] = tmp
+                root = Path(tmp) / "com.dowen.local_exporter" / "toolchain"
+                settings_path = root.parent / "settings.json"
+                settings_path.parent.mkdir(parents=True)
+                settings_path.write_text(json.dumps({
+                    "products": {"youtube": {"mode": "shared", "root": str(root)}}
+                }), encoding="utf-8")
+                root.mkdir(parents=True)
+                unix_ffmpeg = root / "ffmpeg"
+                unix_ffmpeg.touch()
+
+                with patch("youtube_local_exporter.tools.sys.platform", "darwin"):
+                    self.assertEqual(resolve_tool("ffmpeg.exe").path, unix_ffmpeg)
+        finally:
+            if previous_localappdata is None:
+                os.environ.pop("LOCALAPPDATA", None)
+            else:
+                os.environ["LOCALAPPDATA"] = previous_localappdata
+
+    def test_update_script_uses_shell_on_macos(self):
+        with patch("youtube_local_exporter.config.sys.platform", "darwin"):
+            self.assertEqual(update_script_path().name, "update-tools.sh")
+        self.assertEqual(update_script_command(Path("/tmp/update-tools.sh")), ["/bin/sh", "/tmp/update-tools.sh"])
 
     def test_whisper_backend_prefers_cuda_binary_when_cuda_is_available(self):
         previous_localappdata = os.environ.get("LOCALAPPDATA")

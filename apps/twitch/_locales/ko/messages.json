@@ -26,7 +26,7 @@
   "outputDir": { "message": "출력 폴더" },
   "chooseFolder": { "message": "선택..." },
   "openingFolderPicker": { "message": "여는 중..." },
-  "openingFolderPickerDetail": { "message": "Windows 대화 상자에서 출력 폴더를 선택하세요." },
+  "openingFolderPickerDetail": { "message": "시스템 대화 상자에서 출력 폴더를 선택하세요." },
   "folderPickerCancelled": { "message": "폴더 선택이 취소되었습니다." },
   "askOutputDirOnExport": { "message": "내보내기 전마다 묻기" },
   "useBrowserCookies": { "message": "브라우저 쿠키 사용" },
